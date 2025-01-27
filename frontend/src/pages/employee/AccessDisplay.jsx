@@ -21,10 +21,10 @@ const AccessDisplay = ({ accessString }) => {
         ProjectManagement: ['Project Management', 'Stage Management', 'Substage Management'],
         TrainingManagement: ['Employee Training', 'Course Management'],
         TicketTracking: [
-            'View self created tickets',
             'View department created tickets',
             'View department assigned tickets',
             'View all tickets',
+            'View assigned tickets',
             'Change ticket status',
             'Change ticket assignee',
             'Get and release ticket',

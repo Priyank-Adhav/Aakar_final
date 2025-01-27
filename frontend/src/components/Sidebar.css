@@ -68,7 +68,7 @@
 }
 
 .submenu {
-  overflow: hidden;
+  /* overflow: hidden; */
   max-height: 0;
   opacity: 0;
   transition: max-height 0.3s ease-out, opacity 0.3s ease-out; /* Smooth animation */
