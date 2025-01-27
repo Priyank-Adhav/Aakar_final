@@ -34,6 +34,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.static('uploads'))
 app.use(express.static('public'))
 app.use(cookieParser())
+app.use('/ticketRoutes/uploads', express.static('ticketRoutes/uploads'));
 
 app.use(
   cors({

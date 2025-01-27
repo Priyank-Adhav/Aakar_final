@@ -53,9 +53,8 @@ const UpdateProject = () => {
     endDate: '',
     projectType: '',
     projectPOLink: '',
-    progress: '',
+    progress: 0,
     projectDesignDocLink: '',
-    projectCreatedBy: user.employeeId,
     updateReason: '',
   })
 
@@ -108,10 +107,14 @@ const UpdateProject = () => {
         activeStages.map((s) => ({
           ...s,
           owner: `${s.owner}(${s.ownerId})`,
-          createdBy: user.employeeId,
         }))
       )
-      setOriginalStages(activeStages.map((s) => ({ ...s })))
+      setOriginalStages(
+        activeStages.map((s) => ({
+          ...s,
+          owner: `${s.owner}(${s.ownerId})`,
+        }))
+      )
     }
   }, [activeStages])
   console.log({ updateInputValuesBefore: inputValues })
@@ -119,24 +122,33 @@ const UpdateProject = () => {
   const handleSave = (e) => {
     e.preventDefault()
     console.log({ updateInputValuesAfter: inputValues })
+    inputValues.updateReason
     const updateReason =
       stage
         .filter((s, index) => hasChanges(s, originalStages[index]))
-        .map((s) => `Stage: ${s.stageName}, Reason: ${s.updateReason || 'N/A'}`)
+        .map(
+          (s) =>
+            `Stage: ${s.stageName}, Reason: ${s.updateReason || 'Not Provided'}`
+        )
         .join('; ') ||
       inputValues.updateReason ||
       'Progress Updated'
 
     stage.forEach((s, index) => {
       const originalStage = originalStages[index]
-      if (s && originalStage) {
-        if (hasChanges(s, originalStage)) {
-          dispatch(updateStage({ ...s, projectNumber: pNo }))
-        }
-      } else if (s && !originalStage) {
+      if (originalStage && hasChanges(s, originalStage)) {
+        // Update existing stages
+        console.log({ originalStageFu: originalStage })
+        console.log({ sFu: s })
+        dispatch(updateStage({ ...s, projectNumber: pNo }))
+      } else if (!originalStage && s.stageId === undefined) {
+        // Add only new stages without IDs
+        console.log({ originalStageFu2: originalStage })
+        console.log({ sFu2: s })
         dispatch(addStage({ ...s, projectNumber: pNo }))
       }
     })
+
     dispatch(
       updateProject({
         id: pNo,
@@ -150,8 +162,12 @@ const UpdateProject = () => {
   }
 
   const hasChanges = (stage, originalStage) => {
-    if (!stage || !originalStage) return false // Ensure both are valid objects
-    return Object.keys(stage).some((key) => stage[key] !== originalStage[key])
+    if (!stage || !originalStage) return false
+    return Object.keys(stage).some((key) => {
+      // Ignore fields that don't indicate a meaningful change
+      if (['createdBy', 'timestamp'].includes(key)) return false
+      return stage[key] !== originalStage[key]
+    })
   }
 
   return (

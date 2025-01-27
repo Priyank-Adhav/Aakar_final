@@ -11,10 +11,11 @@ import {
   getCompanyList,
 } from '../controllers/project.controller.js'
 import { upload } from '../utils/multer.js'
+import { authMiddleware } from '../middleware/authMiddleware.js'
 const router = Router()
 
 router.get('/project/companyList', getCompanyList)
-router.get('/activeProjects', getActiveProjects) //tested
+router.get('/activeProjects', authMiddleware, getActiveProjects) //tested
 router.get('/historyProjects/:pNo', getHistoricalProjects) //tested
 router.get('/projects', getAllProjects) //tested
 router.get('/projects/:id', getProjectById) //tested
@@ -24,8 +25,9 @@ router.post(
     { name: 'projectPOLink', maxCount: 1 },
     { name: 'projectDesignDocLink', maxCount: 1 },
   ]),
+  authMiddleware,
   createProject
-) //tested
+)
 router.delete('/projects/:id', deleteProject) //tested
 router.put(
   '/projects/:id',
@@ -33,6 +35,7 @@ router.put(
     { name: 'projectPOLink', maxCount: 1 },
     { name: 'projectDesignDocLink', maxCount: 1 },
   ]),
+  authMiddleware,
   updateProject
 ) //tested
 

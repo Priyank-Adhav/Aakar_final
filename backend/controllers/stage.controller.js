@@ -236,7 +236,6 @@ export const createStage = asyncHandler(async (req, res) => {
     machine,
     duration,
     seqPrevStage,
-    createdBy,
     progress,
   } = req.body
 
@@ -294,7 +293,7 @@ export const createStage = asyncHandler(async (req, res) => {
       machine,
       duration,
       seqPrevStage,
-      createdBy,
+      req.user[0].employeeId,
       progress,
     ]
 
@@ -341,8 +340,11 @@ export const deleteStage = asyncHandler(async (req, res) => {
     // console.log(`Updated ${updateResult.affectedRows} subsequent stages`)
 
     // Delete the stage
-    const deleteStageQuery = 'DELETE FROM stage WHERE stageId = ?' //OR historyOf=?
-    const [deleteResult] = await db.promise().query(deleteStageQuery, [stageId]) //[stageId, stageId]
+    const deleteStageQuery =
+      'DELETE FROM stage WHERE stageId = ? OR historyOf=?'
+    const [deleteResult] = await db
+      .promise()
+      .query(deleteStageQuery, [stageId, stageId])
 
     if (deleteResult.affectedRows === 0) {
       console.error(`Failed to delete stage with ID ${stageId}`)
@@ -451,6 +453,11 @@ export const updateStage = asyncHandler(async (req, res) => {
               .send(new ApiError(500, 'Error creating new stage in history'))
           }
 
+          // console.log(req.body);
+          const timestamp = new Date(req.body.timestamp)
+            .toISOString()
+            .replace('T', ' ')
+            .replace('Z', '')
           const updateValues = [
             req.body.projectNumber,
             req.body.stageName,
@@ -460,9 +467,9 @@ export const updateStage = asyncHandler(async (req, res) => {
             req.body.machine,
             req.body.duration,
             req.body.seqPrevStage,
-            req.body.createdBy,
+            req.user[0].employeeId,
             req.body.progress,
-            req.body.timestamp,
+            timestamp,
             stageId,
           ]
 
@@ -516,7 +523,7 @@ export const updateStage = asyncHandler(async (req, res) => {
           req.body.machine,
           req.body.duration,
           req.body.seqPrevStage,
-          req.body.createdBy,
+          req.user[0].employeeId,
           req.body.progress,
           req.body.timestamp,
           stageId,
