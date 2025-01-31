@@ -14,7 +14,7 @@ const TrainingDetails = () => {
         trainingTitle, 
         trainerName, 
         startTrainingDate, 
-        endTrainingDate 
+        endTrainingDate,
       } = location.state || {};
     const navigate = useNavigate();
     const [sessionData, setSessionData] = useState([]);
@@ -34,7 +34,11 @@ const TrainingDetails = () => {
     };
 
     const handleEmployees = () => {
-        navigate('/ManagerEmployeeTrainingEnrolled', { state: { trainingId } });
+        console.log("traininggggggggg", trainingId);
+        navigate('/ManagerEmployeeTrainingEnrolled', { state: { trainingId, trainingTitle, 
+            trainerName, 
+            startTrainingDate, 
+            endTrainingDate } });
       }
 
     const handleViewAttendance = (sessionId) => {

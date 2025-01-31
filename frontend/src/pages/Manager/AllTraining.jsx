@@ -243,6 +243,7 @@ const AllTraining = () => {
         trainerName: row.trainerName,
         startTrainingDate: row.startTrainingDate,
         endTrainingDate: row.endTrainingDate,
+        
       },
     });
   };
