@@ -3,34 +3,41 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import { FiArrowLeftCircle } from 'react-icons/fi';
+import { FaPencilAlt } from 'react-icons/fa'; 
+import { Modal, Box, Typography } from "@mui/material";
 import TableCo from '../../components/TableCo';
 import Grade from './Grade';
 import './ManagerEmployeeTrainingEnrolled.css';
-import {saveEmployeeData} from './SkillMatrixAPI';
-import {fetchEmployeesEnrolled} from './TrainingAPI';
+import { saveEmployeeData } from './SkillMatrixAPI';
+import { fetchEmployeesEnrolled } from './TrainingAPI';
+import ReportGenerator from "./ReportGenerator"; // PDF generation component
+import dayjs from "dayjs";  // Import day.js
 
 const ManagerEmployeeTrainingEnrolled = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { trainingId } = location.state || {};
+  const { trainingId, trainingTitle, trainerName, startTrainingDate, endTrainingDate } = location.state || {};
   const [employeeData, setEmployeeData] = useState([]);
   const [skills, setSkills] = useState([]);
   const [gradeChanges, setGradeChanges] = useState({});
   const [newSelectedEmp, setNewSelectedEmp] = useState([]);
   const [removeEmp, setRemoveEmp] = useState([]);
+  const [sessionDate, setSessionDate] = useState("");  // Initialize state
   const [loading, setLoading] = useState(false);
+  const [attendanceModalOpen, setAttendanceModalOpen] = useState(false);
+  const [attendanceData, setAttendanceData] = useState(null);
+  const today = dayjs(new Date()).format("DD-MM-YYYY");
 
   const fetchEmployeeData = () => {
     if (!trainingId) {
       toast.error('Training ID is missing.');
+      console.log("ttt", trainingId);
       navigate(-1);
       return;
     }
 
     fetchEmployeesEnrolled(trainingId)
       .then((response) => {
-        console.log("Training Id  : ",trainingId)
-        console.log("Response Data : trainin planning : ",response);
         if (Array.isArray(response)) {
           const skillSet = new Set();
           const data = response.reduce((acc, curr) => {
@@ -41,7 +48,6 @@ const ManagerEmployeeTrainingEnrolled = () => {
             let employee = acc.find((e) => e.employeeId === curr.employeeId);
             if (!employee) {
               employee = {
-                srNo: acc.length + 1,
                 employeeId: curr.employeeId,
                 employeeName: curr.employeeName,
                 departmentName: curr.departmentName,
@@ -74,13 +80,46 @@ const ManagerEmployeeTrainingEnrolled = () => {
     fetchEmployeeData();
   }, [trainingId, navigate]);
 
+  const handleAttendanceReport = async (employeeId, trainingId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/attendance-report`, {
+        params: { employeeId, trainingId }
+      });
+  
+      console.log("trainingId:", trainingId);
+      console.log("employeeId:", employeeId);
+      console.log("response:", response.data.attendanceRecords);
+  
+      if (response.data.attendanceRecords && response.data.attendanceRecords.length > 0) {
+        const formattedDate = dayjs(response.data.attendanceRecords[0].sessionDate).format("DD-MM-YYYY");
+  
+        const records = response.data.attendanceRecords.map(record => ({
+          sessionName: record.sessionName,
+          attendanceStatus: record.attendanceStatus
+        }));
+  
+        const headers = [
+          { id: "sessionName", label: "Session Name", align: "center" },
+          { id: "attendanceStatus", label: "Attendance Status", align: "center" },
+        ];
+  
+        setAttendanceData({ headers, records });
+        setSessionDate(formattedDate);  // Store sessionDate separately
+        setAttendanceModalOpen(true);
+      } else {
+        toast.info("No attendance records found.");
+      }
+    } catch (error) {
+      toast.error("Error fetching attendance report: " + error.message);
+    }
+  };
+  
   const handleGradeChange = (employeeId, skillId, newGrade) => {
     setGradeChanges((prev) => ({
       ...prev,
       [`${employeeId}-${skillId}`]: { employeeId, skillId, grade: newGrade },
     }));
-  
-    // Update employee data with new grade
+
     setEmployeeData((prevData) =>
       prevData.map((employee) => {
         if (employee.employeeId === employeeId) {
@@ -102,35 +141,33 @@ const ManagerEmployeeTrainingEnrolled = () => {
         return employee;
       })
     );
-  
-    // Add to removeEmp if grade has changed
+
     setRemoveEmp((prevRemoveEmp) => {
       const exists = prevRemoveEmp.some(
         (item) => item.employeeId === employeeId && item.skillId === skillId
       );
-  
+
       if (!exists && newGrade !== null) {
         return [...prevRemoveEmp, { employeeId, skillId }];
       }
-  
+
       return prevRemoveEmp;
     });
   };
-  
+
   const handleUpdateGrades = () => {
     if (Object.keys(gradeChanges).length === 0) {
       toast.info('No changes to update.');
       return;
     }
-  
+
     setLoading(true);
-  
+
     saveEmployeeData(newSelectedEmp, removeEmp, gradeChanges)
       .then(() => {
-        console.log("remove", removeEmp);
         toast.success('Grades updated successfully!');
         setGradeChanges({});
-        setRemoveEmp([]); // Clear the removeEmp state after update
+        setRemoveEmp([]);
         fetchEmployeeData();
       })
       .catch((error) => {
@@ -138,7 +175,6 @@ const ManagerEmployeeTrainingEnrolled = () => {
       })
       .finally(() => setLoading(false));
   };
-  
 
   const baseColumns = [
     { id: 'employeeName', label: 'Employee Name', align: 'center' },
@@ -161,7 +197,21 @@ const ManagerEmployeeTrainingEnrolled = () => {
     ),
   }));
 
-  const columns = [...baseColumns, ...skillColumns];
+  const attendanceColumn = {
+    id: 'attendanceReport',
+    label: 'Attendance Report',
+    align: 'center',
+    render: (row) => (
+      <FaPencilAlt
+        className="attendance-icon"
+        onClick={() => handleAttendanceReport(row.employeeId, trainingId)}
+        title="View Attendance Report"
+        style={{ cursor: 'pointer', color: '#007bff' }}
+      />
+    ),
+  };
+
+  const columns = [...baseColumns, ...skillColumns, attendanceColumn];
 
   const showUpdateButton = employeeData.some(
     (employee) => employee.trainerFeedback === 'Pass'
@@ -191,6 +241,32 @@ const ManagerEmployeeTrainingEnrolled = () => {
       <div className='manager-employee-training-container'>
         <TableCo rows={employeeData} columns={columns} />
       </div>
+
+      {/* Attendance Report Modal */}
+      <Modal open={attendanceModalOpen} onClose={() => setAttendanceModalOpen(false)}>
+        <Box sx={{ width: "80%", margin: "auto", mt: 5, backgroundColor: "white", padding: 3 }}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            Attendance Report
+          </Typography>
+          {attendanceData && (
+            <ReportGenerator 
+            reportTitle = "Training Attendance Sheet" 
+            docNo = "test doc 123"
+            OriginDate = {today}
+            revNo = "123"
+            revDate =  "12-11-2025"
+            trainerName = {trainerName}
+            location = "pune"
+            trainingTitle = {trainingTitle}
+            startTrainingDate = {startTrainingDate}
+            sessionDate={sessionDate}
+            endTrainingDate = {endTrainingDate}
+            tableHeaders={attendanceData.headers}
+            tableData={attendanceData.records || []}
+            />
+          )}
+        </Box>
+      </Modal>
 
       <ToastContainer />
     </div>

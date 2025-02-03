@@ -114,5 +114,41 @@ console.log("fvibhwbhs")
   res.status(200).json({ message: 'Feedback saved successfully' });
 });
 
+// API route to fetch the attendance report
+router.get('/api/attendance-report', (req, res) => {
+  console.log("helooooooo");
+  const { employeeId, trainingId } = req.query;
+
+  // Validate the presence of query parameters
+  if (!employeeId || !trainingId) {
+    return res.status(400).json({ error: 'Employee ID and Training ID are required' });
+  }
+  
+  // Query to fetch attendance details for the given employee and training
+  const query = `
+    SELECT 
+      s.sessionId,
+      s.sessionName,
+      s.sessionDate,
+      CASE 
+        WHEN a.attendanceStatus = 1 THEN 'Pass'
+        ELSE 'Fail'
+      END AS attendanceStatus
+    FROM sessions s
+    LEFT JOIN attendance a ON a.sessionId = s.sessionId AND a.employeeId = ?
+    WHERE s.trainingId = ?
+    ORDER BY s.sessionDate;
+  `;
+  console.log("helooooooo");
+  connection.query(query, [employeeId, trainingId], (err, result) => {
+    if (err) {
+      console.error("Error fetching attendance report:", err);
+      return res.status(500).json({ error: 'Error fetching attendance report' });
+    }
+    res.json({ attendanceRecords: result });  // Wrap result in an object
+  // Send the result as a JSON response
+  });
+});
+
 // Export the router
 export default router;
