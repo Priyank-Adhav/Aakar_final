@@ -22,6 +22,7 @@ import SendMailToForm from '../SendMailForm/SendMailForm';
 import { IoArrowBackCircleOutline } from 'react-icons/io5'; // Import back arrow icon
 import { IoIosAddCircleOutline } from 'react-icons/io'; // Import add icon
 import { useNavigate } from 'react-router-dom'; // Importing useNavigate for navigation
+import {IP} from '../../constants'
 
 const ManageSendMailTo = () => {
   const [sendMailEntries, setSendMailEntries] = useState([]);
@@ -35,7 +36,7 @@ const ManageSendMailTo = () => {
 
   const fetchSendMailEntries = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/sendMailTo/sendMailTo');
+      const response = await axios.get(`http://${IP}:3000/sendMailTo/sendMailTo`);
       setSendMailEntries(response.data.data);
     } catch (error) {
       console.error('Error fetching send mail entries:', error);
@@ -44,7 +45,7 @@ const ManageSendMailTo = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/sendMailTo/sendMailTo/${id}`);
+      await axios.delete(`http://${IP}:3000/sendMailTo/sendMailTo/${id}`);
       fetchSendMailEntries();
     } catch (error) {
       console.error('Error deleting send mail entry:', error);

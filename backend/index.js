@@ -26,6 +26,7 @@ import stageRoutes from './routes/stage.routes.js'
 import substageRoutes from './routes/substage.routes.js'
 
 const app = express()
+const ip = '127.0.0.1'
 
 dotenv.config({ path: './.env' })
 
@@ -38,14 +39,16 @@ app.use('/ticketRoutes/uploads', express.static('ticketRoutes/uploads'));
 
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Your frontend URL (adjust port if necessary)
+    origin: `http://${ip}:5173`, // Your frontend URL (adjust port if necessary)
+    // origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
     credentials: true, // Allow credentials like cookies to be sent
   })
 )
 
+
 const port = process.env.PORT || 3000
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, ip, () => {
   console.log('Server running on port: ' + port)
 })
 

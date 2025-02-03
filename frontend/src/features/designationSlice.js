@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import {IP} from '../constants'
 
-const BASE_URL = "http://localhost:3000/api/v1/designation";
+const BASE_URL = `http://${IP}:3000/api/v1/designation`;
 
 // Thunks (async actions)
 export const fetchDesignations = createAsyncThunk(

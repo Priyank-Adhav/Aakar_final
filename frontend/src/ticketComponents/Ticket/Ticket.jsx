@@ -14,7 +14,7 @@ export default function AccordionExpandDefault({ ticketId }) {
   useEffect(() => {
     const fetchTicketData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/tickets/tickets/${ticketId}`);
+        const response = await axios.get(`http://${IP}:3000/tickets/tickets/${ticketId}`);
         setTicketData(response.data);
       } catch (error) {
         console.error('Error fetching ticket data:', error);
@@ -99,7 +99,7 @@ export default function AccordionExpandDefault({ ticketId }) {
             
             <a
               key={index}
-              href={`http://localhost:3000/${attachment}`}
+              href={`http://${IP}:3000/${attachment}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: 'block', marginTop: '5px' }}

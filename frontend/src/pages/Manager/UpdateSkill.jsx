@@ -8,6 +8,7 @@ import Textfield from '../../components/Textfield';
 import { Checkbox } from '@mui/material';
 import { departmentExpectedSkill, skillTrainingByDepartment, deactivateSkill, updateSkill, addSkill,  removeSkillFromDepartment, addSkillToDepartment  } from './UpdateSkillAPI'; // Import the API function
 import { useSelector } from 'react-redux';
+import { IP } from '../../constants';
 
 const UpdateSkill = () => {
   const [allDept,setAllDept] = useState([]);
@@ -36,7 +37,7 @@ const UpdateSkill = () => {
   useEffect(() => {
     // if (departmentId) {
     //   setLoading(true);
-    //   axios.get(`http://localhost:8081/skills/${departmentId}`)
+    //   axios.get(`http://${IP}:8081/skills/${departmentId}`)
     //     .then(response => {
     //       console.log("Skills ",response.data)
     //       setSkills(response.data);
@@ -248,8 +249,8 @@ const UpdateSkill = () => {
       }
       
       const url = row.departmentId === departmentId 
-        ? `http://localhost:3000/remove-3-in-deparment-skill` 
-        : `http://localhost:3000/remove-2-in-deparment-skill`;
+        ? `http://${IP}:3000/remove-3-in-deparment-skill` 
+        : `http://${IP}:3000/remove-2-in-deparment-skill`;
   
       removeSkillFromDepartment(body, url)
         .then(response => {
@@ -262,8 +263,8 @@ const UpdateSkill = () => {
       // Add skillId to the list
       setGlobalExpectedSkill([...globalExpectedSkill, row.skillId]);
       const url = row.departmentId !== departmentId 
-        ? `http://localhost:3000/add-2-in-department-skill`
-        : `http://localhost:3000/add-3-in-department-skill`;
+        ? `http://${IP}:3000/add-2-in-department-skill`
+        : `http://${IP}:3000/add-3-in-department-skill`;
   
       addSkillToDepartment(body, url)
         .then(response => {

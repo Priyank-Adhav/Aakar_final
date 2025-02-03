@@ -43,10 +43,10 @@ function TicketPage() {
   useEffect(() => {
     const fetchAssigneeHistory = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/ticketAssigneeHistory/assignee-history/${id}`);
+        const response = await fetch(`http://${IP}:3000/ticketAssigneeHistory/assignee-history/${id}`);
         const data = await response.json();
         setHistoryData(data);
-        const ticketresponse = await fetch(`http://localhost:3000/tickets/tickets/${id}`);
+        const ticketresponse = await fetch(`http://${IP}:3000/tickets/tickets/${id}`);
         const ticketdata = await ticketresponse.json();
         setTicket(ticketdata);
 
@@ -59,7 +59,7 @@ function TicketPage() {
 
     const fetchMessages = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/logs/logs/ticket/${id}`);
+        const response = await fetch(`http://${IP}:3000/logs/logs/ticket/${id}`);
         const data = await response.json();
         setMessages(data);
       } catch (error) {

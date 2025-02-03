@@ -82,17 +82,17 @@ const TicketDetails = ({ ticket = {} }) => {
       const fetchDetails = async () => {
         try {
           // Fetch messages
-          const messagesResponse = await fetch(`http://localhost:3000/logs/logs/ticket/${ticket.id}`);
+          const messagesResponse = await fetch(`http://${IP}:3000/logs/logs/ticket/${ticket.id}`);
           const messagesData = await messagesResponse.json();
           setMessages(messagesData);
 
           // Fetch assignee history
-          const historyResponse = await fetch(`http://localhost:3000/ticketAssigneeHistory/assignee-history/${ticket.id}`);
+          const historyResponse = await fetch(`http://${IP}:3000/ticketAssigneeHistory/assignee-history/${ticket.id}`);
           const historyData = await historyResponse.json();
           setHistoryData(historyData);
 
           // Fetch status history
-          const statusHistoryResponse = await fetch(`http://localhost:3000/ticketStatusHistory/status-history/${ticket.id}`);
+          const statusHistoryResponse = await fetch(`http://${IP}:3000/ticketStatusHistory/status-history/${ticket.id}`);
           const statusHistoryData = await statusHistoryResponse.json();
           setStatusHistoryData(statusHistoryData);
           console.log(statusHistoryData);

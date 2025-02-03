@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import UserContext from "../context/UserContext"; // Import UserContext
+import {IP} from '../../constants'
 
 
 
@@ -115,11 +116,11 @@ function StatusUpdate({ ticketId, currentStatus, onUpdate={} }) {
 
     try {
       // Update the status in the tickets table
-      const response = await axios.put(`http://localhost:3000/tickets/tickets/${ticketId}/status`, { status: newStatus });
+      const response = await axios.put(`http://${IP}:3000/tickets/tickets/${ticketId}/status`, { status: newStatus });
 
 
       // Add the status change to the ticket_status_history table
-      await axios.put('http://localhost:3000/ticketStatusHistory/status-history', statusChangePayload);
+      await axios.put(`http://${IP}:3000/ticketStatusHistory/status-history`, statusChangePayload);
 
       if (response.status === 200) {
         console.log(response.data);
@@ -159,7 +160,7 @@ function StatusUpdate({ ticketId, currentStatus, onUpdate={} }) {
   useEffect(() => {
     const fetchTicketData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/tickets/tickets/${ticketId}`);
+        const response = await axios.get(`http://${IP}:3000/tickets/tickets/${ticketId}`);
         setSelectedStatus(response.data.status);
         setRow(response.data);
       } catch (error) {
@@ -185,7 +186,7 @@ function StatusUpdate({ ticketId, currentStatus, onUpdate={} }) {
   //   setError(null);
 
   //   try {
-  //     await axios.put(`http://localhost:3000/tickets/tickets/${ticketId}/status`, { status: selectedStatus });
+  //     await axios.put(`http://${IP}:3000/tickets/tickets/${ticketId}/status`, { status: selectedStatus });
 
   //     setSnackbarMessage('Status updated successfully.');
   //     setShowDropdown(false);

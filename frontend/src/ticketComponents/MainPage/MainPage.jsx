@@ -7,6 +7,7 @@ import TicketTable from "../TicketTable/TicketTable";
 import axios from "axios";
 import UserContext from "../context/UserContext"; // Import UserContext
 import SearchBar from "../SearchBar/SearchBar";
+import {IP} from '../../constants'
 
 
 
@@ -24,7 +25,7 @@ function App() {
 
   const fetchTickets = async (role) => {
     try {
-      let endpoint = "http://localhost:3000/tickets/tickets";
+      let endpoint = `http://${IP}:3000/tickets/tickets`;
       let params = {};
 
       if (role?.designation === "Executive") {

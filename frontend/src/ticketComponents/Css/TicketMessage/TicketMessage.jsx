@@ -5,6 +5,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { LuSend } from 'react-icons/lu'; // Import LuSend icon
 import axios from 'axios'; // Import Axios
+import {IP} from '../../../constants'
 
 const TicketMessageContainer = styled(Card)(({ theme }) => ({
   width: '1200px',
@@ -77,7 +78,7 @@ const TicketMessage = ({ ticketId, employeeId, handleMessages }) => {
     });
 
     try {
-      const response = await axios.post('http://localhost:3000/logs/logs', formData, {
+      const response = await axios.post(`http://${IP}:3000/logs/logs`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

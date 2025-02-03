@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, Autocomplete } from '@mui/material';
 import axios from 'axios';
+import {IP} from '../../constants'
 
 const TicketTitleForm = ({ title, onSave, onClose }) => {
   const [formData, setFormData] = useState(title || { issue_type: '', title: '' });
@@ -9,7 +10,7 @@ const TicketTitleForm = ({ title, onSave, onClose }) => {
   useEffect(() => {
     const fetchIssueTypes = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/issue_type/issue_types');
+        const response = await axios.get(`http://${IP}:3000/issue_type/issue_types`);
         setIssueTypes(response.data);
       } catch (error) {
         console.error('Error fetching issue types:', error);
@@ -32,9 +33,9 @@ const TicketTitleForm = ({ title, onSave, onClose }) => {
     console.log('Submitting form data:', { issue: issue_type, title }); // Log the data being submitted
     try {
       if (formData.id) {
-        await axios.put(`http://localhost:3000/ticketTitles/ticket_titles/${formData.id}`, { issue: issue_type, title });
+        await axios.put(`http://${IP}:3000/ticketTitles/ticket_titles/${formData.id}`, { issue: issue_type, title });
       } else {
-        await axios.post('http://localhost:3000/ticketTitles/ticket_titles', { issue: issue_type, title });
+        await axios.post(`http://${IP}:3000/ticketTitles/ticket_titles`, { issue: issue_type, title });
       }
       onSave();
       onClose();

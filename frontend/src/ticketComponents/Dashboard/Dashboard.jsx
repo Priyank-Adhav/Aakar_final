@@ -8,6 +8,7 @@ import UserContext from '../context/UserContext';
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
+import {IP} from '../../constants'
 
 const NavigationHeader = ({ title, subtitle, user, selectedRole }) => (
   <Box display="flex" alignItems="center" padding={{ xs: '8px', sm: '16px' }} flexDirection={{ xs: 'column', sm: 'row' }} gap={2}>
@@ -110,7 +111,7 @@ const CategoryWiseTickets = ({ categories }) => (
 // Updated fetchTickets function to pass the correct user info and params based on currentRole
 const fetchTickets = async (role, user, setTickets, setDepartmentTickets, setTicketSummary) => {
   try {
-    // let endpoint = "http://localhost:3000/tickets/tickets";
+    // let endpoint = "http://${IP}:3000/tickets/tickets";
     let params = {};
 
     if (role?.designation === "Executive") {
@@ -124,7 +125,7 @@ const fetchTickets = async (role, user, setTickets, setDepartmentTickets, setTic
     }
 
 
-    let endpoint = "http://localhost:3000/tickets/tickets/summary";
+    let endpoint = `http://${IP}:3000/tickets/tickets/summary`;
 
     const response = await axios.get(endpoint, { params });
     setTicketSummary(response.data);

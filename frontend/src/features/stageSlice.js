@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { IP } from '../constants'
 
 const initialStageState = {
   stage: {},
@@ -11,7 +12,7 @@ const initialStageState = {
 }
 
 export const addStage = createAsyncThunk('stages/addStage', async (stage) => {
-  const response = await axios.post('http://localhost:3000/api/stages', stage, {
+  const response = await axios.post(`http://${IP}:3000/api/stages`, stage, {
     withCredentials: true,
   })
   return response.data.data
@@ -22,7 +23,7 @@ export const deleteStage = createAsyncThunk(
   async (id = '') => {
     console.log(id)
     const response = await axios.delete(
-      `http://localhost:3000/api/stages/${id}`,
+      `http://${IP}:3000/api/stages/${id}`,
       {
         withCredentials: true,
       }
@@ -35,7 +36,7 @@ export const deleteStage = createAsyncThunk(
 export const fetchSingleStageById = createAsyncThunk(
   'stage/fetchStageById',
   async (id = '') => {
-    const response = await axios.get(`http://localhost:3000/api/stage/${id}`, {
+    const response = await axios.get(`http://${IP}:3000/api/stage/${id}`, {
       withCredentials: true,
     })
     return response.data
@@ -46,7 +47,7 @@ export const fetchHistoryStagesByStageId = createAsyncThunk(
   'stages/fetchHistoryStagesByStageId',
   async (id = '') => {
     const response = await axios.get(
-      `http://localhost:3000/api/historyStages/${id}`,
+      `http://${IP}:3000/api/historyStages/${id}`,
       {
         withCredentials: true,
       }
@@ -59,7 +60,7 @@ export const fetchActiveStagesByProjectNumber = createAsyncThunk(
   'stages/fetchActiveStagesByProjectNumber',
   async (id = '') => {
     const response = await axios.get(
-      `http://localhost:3000/api/activeStages/${id}`,
+      `http://${IP}:3000/api/activeStages/${id}`,
       {
         withCredentials: true,
       }
@@ -71,7 +72,7 @@ export const fetchActiveStagesByProjectNumber = createAsyncThunk(
 export const fetchStagesByPno = createAsyncThunk(
   'stages/fetchStagesByPno',
   async (id = '') => {
-    const response = await axios.get(`http://localhost:3000/api/stages/${id}`, {
+    const response = await axios.get(`http://${IP}:3000/api/stages/${id}`, {
       withCredentials: true,
     })
     return response.data.data
@@ -79,7 +80,7 @@ export const fetchStagesByPno = createAsyncThunk(
 )
 
 export const stageList = createAsyncThunk('stages/stageList', async () => {
-  const response = await axios.get('http://localhost:3000/api/stages/list', {
+  const response = await axios.get(`http://${IP}:3000/api/stages/list`, {
     withCredentials: true,
   })
   return response.data.data
@@ -88,7 +89,7 @@ export const stageList = createAsyncThunk('stages/stageList', async () => {
 export const updateStage = createAsyncThunk('stages/updateStage', async (s) => {
   console.log(s)
   const response = await axios.put(
-    `http://localhost:3000/api/stages/${s.stageId}`,
+    `http://${IP}:3000/api/stages/${s.stageId}`,
     s,
     {
       withCredentials: true,

@@ -22,7 +22,7 @@ const MessageCard = ({ message }) => {
             
             <a
               key={index}
-              href={`http://localhost:3000/${attachment}`}
+              href={`http://${IP}:3000/${attachment}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{ display: 'block', marginTop: '5px' }}

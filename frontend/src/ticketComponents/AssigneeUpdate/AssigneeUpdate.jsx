@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 
 
+import {IP} from '../../constants'
 
 import Snackbar from '@mui/material/Snackbar';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -54,7 +55,7 @@ function AssigneeUpdate({ ticketId, assigneeOptions, currentAssignee, onUpdate }
 
 
   const handleUpdateClick = async () => {
-    const assigneeResponse = await axios.get(`http://localhost:3000/employee/employees/department/${row.department}`);
+    const assigneeResponse = await axios.get(`http://${IP}:3000/employee/employees/department/${row.department}`);
     setAssigneeOptionsState(assigneeResponse.data);
     setShowDropdown(!showDropdown);
   };
@@ -64,7 +65,7 @@ function AssigneeUpdate({ ticketId, assigneeOptions, currentAssignee, onUpdate }
   useEffect(() => {
     const fetchTicketData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/tickets/tickets/${ticketId}`);
+        const response = await axios.get(`http://${IP}:3000/tickets/tickets/${ticketId}`);
 
         setRow(response.data);
 
@@ -91,7 +92,7 @@ function AssigneeUpdate({ ticketId, assigneeOptions, currentAssignee, onUpdate }
 
   //   setLoading(true);
   //   try {
-  //     await axios.put(`http://localhost:3000/tickets/tickets/${ticketId}/assignee`, { assignee: selectedAssignee });
+  //     await axios.put(`http://${IP}:3000/tickets/tickets/${ticketId}/assignee`, { assignee: selectedAssignee });
   //     // onUpdate(selectedAssignee); // Call the parent callback to update UI
   //     setSnackbarMessage('Assignee updated successfully.');
   //     setShowDropdown(false);
@@ -140,10 +141,10 @@ function AssigneeUpdate({ ticketId, assigneeOptions, currentAssignee, onUpdate }
 
     try {
       // Update the assignee in the tickets table
-      const response = await axios.put(`http://localhost:3000/tickets/tickets/${ticketId}/assignee`, { assignee: newAssignee });
+      const response = await axios.put(`http://${IP}:3000/tickets/tickets/${ticketId}/assignee`, { assignee: newAssignee });
 
       // Add the assignee change to the ticket_assignee_history table
-      await axios.post('http://localhost:3000/ticketAssigneeHistory/assignee-history', assigneeChangePayload);
+      await axios.post(`http://${IP}:3000/ticketAssigneeHistory/assignee-history`, assigneeChangePayload);
 
       console.log('Assignee updated successfully to:', newAssignee);
       if (response.status === 200) {

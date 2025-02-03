@@ -22,6 +22,7 @@ import BasicSolutionForm from '../BasicSolutionForm/BasicSolutionForm';
 import { IoArrowBackCircleOutline } from 'react-icons/io5';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom'; // Importing useNavigate for navigation
+import {IP} from '../../constants'
 
 const ManageBasicSolutions = () => {
   const [basicSolutions, setBasicSolutions] = useState([]);
@@ -35,7 +36,7 @@ const ManageBasicSolutions = () => {
 
   const fetchBasicSolutions = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/basicSolutions/basic_solutions');
+      const response = await axios.get(`http://${IP}:3000/basicSolutions/basic_solutions`);
       setBasicSolutions(response.data);
     } catch (error) {
       console.error('Error fetching basic solutions:', error);
@@ -44,7 +45,7 @@ const ManageBasicSolutions = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/basicSolutions/basic_solutions/${id}`);
+      await axios.delete(`http://${IP}:3000/basicSolutions/basic_solutions/${id}`);
       fetchBasicSolutions();
     } catch (error) {
       console.error('Error deleting basic solution:', error);

@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import {IP} from '../constants'
 
 export const addProject = createAsyncThunk(
   'projects/addProject',
   async (project, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/projects',
+        `http://${IP}:3000/api/projects`,
 
         project,
 
@@ -30,7 +31,7 @@ export const fetchHistoryProjects = createAsyncThunk(
   'projects/fetchHistoryProjects',
   async (pNo = '') => {
     const response = await axios.get(
-      `http://localhost:3000/api/historyProjects/${pNo}`,
+      `http://${IP}:3000/api/historyProjects/${pNo}`,
       { withCredentials: true }
     )
     console.log(response)
@@ -42,7 +43,7 @@ export const fetchActiveProjects = createAsyncThunk(
   'projects/fetchActiveProjects',
   async () => {
     const response = await axios.get(
-      'http://localhost:3000/api/activeProjects',
+      `http://${IP}:3000/api/activeProjects`,
       {
         withCredentials:true
       }
@@ -55,7 +56,7 @@ export const fetchActiveProjects = createAsyncThunk(
 export const fetchProjects = createAsyncThunk(
   'projects/fetchProjects',
   async () => {
-    const response = await axios.get(`http://localhost:3000/api/projects`, {
+    const response = await axios.get(`http://${IP}:3000/api/projects`, {
       withCredentials: true,
     })
     console.log(response)
@@ -67,7 +68,7 @@ export const fetchProjectById = createAsyncThunk(
   'projects/fetchProjectById',
   async (id = '') => {
     const response = await axios.get(
-      `http://localhost:3000/api/projects/${id}`,
+      `http://${IP}:3000/api/projects/${id}`,
       {
         withCredentials: true,
       }
@@ -82,7 +83,7 @@ export const updateProject = createAsyncThunk(
     console.log(id)
     console.log(data)
     const response = await axios.put(
-      `http://localhost:3000/api/projects/${id}`,
+      `http://${IP}:3000/api/projects/${id}`,
       data,
       {
         headers: {
@@ -99,7 +100,7 @@ export const deleteProject = createAsyncThunk(
   'projects/deleteProject',
   async (id = '') => {
     const response = await axios.delete(
-      `http://localhost:3000/api/projects/${id}`,
+      `http://${IP}:3000/api/projects/${id}`,
       {
         withCredentials: true,
       }

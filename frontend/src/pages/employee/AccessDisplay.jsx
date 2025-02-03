@@ -19,7 +19,7 @@ const AccessDisplay = ({ accessString }) => {
     const subOptions = {
         HRManagement: ['Employee Management', 'Department Management', 'Designation Management'],
         ProjectManagement: ['Project Management', 'Stage Management', 'Substage Management'],
-        TrainingManagement: ['Employee Training', 'Course Management'],
+        TrainingManagement: ['Skills', 'Grade', 'Select for training', 'Assign Training', 'Training Plan'],
         TicketTracking: [
             'View self created tickets',
             'View department created tickets',

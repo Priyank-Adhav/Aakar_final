@@ -72,7 +72,7 @@ const TicketTable = ({
     } else {
       setExpandedTicketId(ticketId);
       try {
-        const response = await axios.get(`http://localhost:3000/ticketAssigneeHistory/assignee-history/${ticketId}`);
+        const response = await axios.get(`http://${IP}:3000/ticketAssigneeHistory/assignee-history/${ticketId}`);
         setHistoryData({
           [ticketId]: response.data
         });

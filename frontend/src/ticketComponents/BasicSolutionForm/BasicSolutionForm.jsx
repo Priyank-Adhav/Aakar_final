@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, Autocomplete } from '@mui/material';
 import axios from 'axios';
+import {IP} from '../../constants'
 
 const BasicSolutionForm = ({ solution, onSave, onClose }) => {
   const [formData, setFormData] = useState({ issue: '', solution: '' });
@@ -10,7 +11,7 @@ const BasicSolutionForm = ({ solution, onSave, onClose }) => {
     // Fetch the list of issue types when the form is opened
     const fetchIssueTypes = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/issue_type/issue_types');
+        const response = await axios.get(`http://${IP}:3000/issue_type/issue_types`);
         setIssueTypes(response.data);
       } catch (error) {
         console.error('Error fetching issue types:', error);
@@ -40,10 +41,10 @@ const BasicSolutionForm = ({ solution, onSave, onClose }) => {
     try {
       if (formData.id) {
         // If there's an ID, update the existing basic solution
-        await axios.put(`http://localhost:3000/basicSolutions/basic_solutions/${formData.id}`, formData);
+        await axios.put(`http://${IP}:3000/basicSolutions/basic_solutions/${formData.id}`, formData);
       } else {
         // Otherwise, create a new basic solution
-        await axios.post('http://localhost:3000/basicSolutions/basic_solutions', formData);
+        await axios.post(`http://${IP}:3000/basicSolutions/basic_solutions`, formData);
       }
       onSave();
       onClose();

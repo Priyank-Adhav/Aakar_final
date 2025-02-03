@@ -7,6 +7,8 @@ import {
   Box, Checkbox, FormControlLabel, FormGroup, TextField
 } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import {IP} from '../../constants'
+
 
 import UserContext from "../context/UserContext.jsx"; // Import UserContext
 import { styled } from '@mui/system';
@@ -155,10 +157,10 @@ const TicketTable = ({
 
     try {
       // Update the assignee in the tickets table
-      const response = await axios.put(`http://localhost:3000/tickets/tickets/${ticketId}/assignee`, { assignee: newAssignee });
+      const response = await axios.put(`http://${IP}:3000/tickets/tickets/${ticketId}/assignee`, { assignee: newAssignee });
 
       // Add the assignee change to the ticket_assignee_history table
-      await axios.post('http://localhost:3000/ticketAssigneeHistory/assignee-history', assigneeChangePayload);
+      await axios.post(`http://${IP}:3000/ticketAssigneeHistory/assignee-history`, assigneeChangePayload);
 
       console.log('Assignee updated successfully to:', newAssignee);
       if (response.status === 200) {
@@ -199,10 +201,10 @@ const TicketTable = ({
     } else {
       setExpandedTicketId(ticketId);
       try {
-        const historyResponse = await axios.get(`http://localhost:3000/ticketAssigneeHistory/assignee-history/${ticketId}`);
+        const historyResponse = await axios.get(`http://${IP}:3000/ticketAssigneeHistory/assignee-history/${ticketId}`);
         setHistoryData({ [ticketId]: historyResponse.data });
 
-        const assigneeResponse = await axios.get(`http://localhost:3000/employee/employees/department/${department}`);
+        const assigneeResponse = await axios.get(`http://${IP}:3000/employee/employees/department/${department}`);
         setAssigneeOptionsState(assigneeResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -214,7 +216,7 @@ const TicketTable = ({
     debounce(async (ticketId, department) => {
       setHoveredRowId(ticketId);
       try {
-        const assigneeResponse = await axios.get(`http://localhost:3000/employee/employees/department/${department}`);
+        const assigneeResponse = await axios.get(`http://${IP}:3000/employee/employees/department/${department}`);
         setAssigneeOptionsState(assigneeResponse.data);
       } catch (error) {
         console.error('Error fetching assignee options on mouse over:', error);
@@ -265,11 +267,11 @@ const TicketTable = ({
 
     try {
       // Update the status in the tickets table
-      const response = await axios.put(`http://localhost:3000/tickets/tickets/${ticketId}/status`, { status: newStatus });
+      const response = await axios.put(`http://${IP}:3000/tickets/tickets/${ticketId}/status`, { status: newStatus });
 
 
       // Add the status change to the ticket_status_history table
-      await axios.put('http://localhost:3000/ticketStatusHistory/status-history', statusChangePayload);
+      await axios.put(`http://${IP}:3000/ticketStatusHistory/status-history`, statusChangePayload);
 
       if (response.status === 200) {
         console.log(response.data);

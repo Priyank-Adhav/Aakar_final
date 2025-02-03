@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, Autocomplete } from '@mui/material';
 import axios from 'axios';
+import {IP} from '../../constants'
 
 const IssueTypeForm = ({ issueType, onSave, onClose }) => {
   const [formData, setFormData] = useState(issueType || { department_name: '', issue: '' });
@@ -10,7 +11,7 @@ const IssueTypeForm = ({ issueType, onSave, onClose }) => {
     // Fetch the list of departments when the form is opened
     const fetchDepartments = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/department/departments');
+        const response = await axios.get(`http://${IP}:3000/department/departments`);
         setDepartments(response.data);
       } catch (error) {
         console.error('Error fetching departments:', error);
@@ -32,10 +33,10 @@ const IssueTypeForm = ({ issueType, onSave, onClose }) => {
     try {
       if (formData.id) {
         // If there's an ID, update the existing issue type
-        await axios.put(`http://localhost:3000/issue_type/issue_types/${formData.id}`, formData);
+        await axios.put(`http://${IP}:3000/issue_type/issue_types/${formData.id}`, formData);
       } else {
         // Otherwise, create a new issue type
-        await axios.post('http://localhost:3000/issue_type/issue_types', formData);
+        await axios.post(`http://${IP}:3000/issue_type/issue_types`, formData);
       }
       onSave();
       onClose();

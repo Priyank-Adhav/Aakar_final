@@ -21,6 +21,7 @@ import * as XLSX from 'xlsx' // Import the xlsx library
 import jsPDF from 'jspdf'
 import 'jspdf-autotable' // Import for table formatting in PDF
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import {IP} from '../../constants'
 
 function FilteredTicketPage() {
   const location = useLocation()
@@ -48,7 +49,7 @@ function FilteredTicketPage() {
   // Function to fetch tickets based on role and user info
   const fetchTickets = async () => {
     try {
-      // let endpoint = "http://localhost:3000/tickets/tickets";
+      // let endpoint = "http://${IP}:3000/tickets/tickets";
       // let params = {};
 
       // if (currentRole?.designation === "Executive") {
@@ -89,7 +90,7 @@ function FilteredTicketPage() {
         }
       }
 
-      let endpoint = 'http://localhost:3000/tickets/filteredTickets'
+      let endpoint = `http://${IP}:3000/tickets/filteredTickets`
 
       // Debugging
       console.log('Sending request to:', endpoint)

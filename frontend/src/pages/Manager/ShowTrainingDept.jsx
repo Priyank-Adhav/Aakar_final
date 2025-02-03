@@ -7,6 +7,7 @@ import './ShowTrainingDept.css';
 import { FiArrowLeftCircle } from 'react-icons/fi';
 import { departmentInfo,departmentSkills,departmentEmployeeData } from './showTrainingDeptAPI';
 import { useSelector } from 'react-redux';
+import { IP } from '../../constants';
 
 const ShowTrainingDept = () => {
   const [empData, setEmpData] = useState({});
@@ -27,7 +28,7 @@ const ShowTrainingDept = () => {
     if (departmentId) {
       setLoading(true);
       axios
-        .get(`http://localhost:3000/DepartmentGiveTskills/${departmentId}`)
+        .get(`http://${IP}:3000/DepartmentGiveTskills/${departmentId}`)
         .then((response) => {
           const skills = response.data.map((skill) => ({
             id: skill.skillId,
@@ -53,7 +54,7 @@ const ShowTrainingDept = () => {
       setLoading(true);
       axios
         .get(
-          `http://localhost:3000/get-distinct-department-employess-skill-to-train/${departmentId}`
+          `http://${IP}:3000/get-distinct-department-employess-skill-to-train/${departmentId}`
         )
         .then((response) => {
           const deptData = response.data || {};

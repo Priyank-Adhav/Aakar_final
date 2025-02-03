@@ -1,9 +1,10 @@
 import axios from 'axios';
 import store from '../store/store.js';
 import {loginSuccess, logout} from '../features/authSlice.js'; // Action to set login state
+import { IP } from '../constants.js';
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000/', // Set your API base URL
+    baseURL: `http://${IP}:3000/`, // Set your API base URL
     timeout: 10000, // Optional, set a timeout
 });
 

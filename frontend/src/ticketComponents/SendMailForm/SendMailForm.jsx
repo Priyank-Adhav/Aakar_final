@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, TextField, Button, Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import axios from 'axios';
+import {IP} from '../../constants'
 
 const SendMailToForm = ({ entry, onSave, onClose }) => {
   const [formData, setFormData] = useState({
@@ -37,10 +38,10 @@ const SendMailToForm = ({ entry, onSave, onClose }) => {
     try {
       if (entry?.id) {
         // Update existing entry
-        await axios.put(`http://localhost:3000/sendMailTo/sendMailTo/${entry.id}`, formData);
+        await axios.put(`http://${IP}:3000/sendMailTo/sendMailTo/${entry.id}`, formData);
       } else {
         // Create new entry
-        await axios.post('http://localhost:3000/sendMailTo/sendMailTo', formData);
+        await axios.post(`http://${IP}:3000/sendMailTo/sendMailTo`, formData);
       }
       onSave();
       onClose();

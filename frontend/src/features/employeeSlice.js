@@ -1,13 +1,17 @@
 // src/features/employeeSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import {IP} from '../constants'
+
+
+const BASE_URL = `http://${IP}:3000/api/v1/employee`
 
 // Async Thunks for API calls
 export const getAllEmployees = createAsyncThunk(
   'employees/getAllEmployees',
   async () => {
     const response = await axios.get(
-      'http://localhost:3000/api/v1/employee/getAllEmployees',
+      `${BASE_URL}/getAllEmployees`,
       {
         withCredentials: true,
       }
@@ -22,7 +26,7 @@ export const addEmployee = createAsyncThunk(
   async (employeeData) => {
     console.log(employeeData)
     const response = await axios.post(
-      'http://localhost:3000/api/v1/employee/addEmployee',
+      `${BASE_URL}/addEmployee`,
       employeeData
     )
     console.log(response.data)
@@ -35,7 +39,7 @@ export const updateEmployee = createAsyncThunk(
   async ({ employeeId, payload }) => {
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/v1/employee/${employeeId}/with-relations`,
+        `${BASE_URL}/${employeeId}/with-relations`,
         payload // Pass the entire payload object as required by the API
       )
       return response.data
@@ -54,7 +58,7 @@ export const deleteEmployee = createAsyncThunk(
   async (employeeId) => {
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/v1/employee/deleteEmployee',
+        `${BASE_URL}/deleteEmployee`,
         { employeeId }
       )
       return employeeId // Return employeeId for removing it from the state
@@ -81,7 +85,7 @@ export const moveEmployee = createAsyncThunk(
 
       // Call the moveEmployee API
       const response = await axios.post(
-        'http://localhost:3000/api/v1/employee/moveEmployee',
+        `${BASE_URL}/moveEmployee`,
         {
           employeeIds,
           toDepartmentId,
@@ -106,7 +110,7 @@ export const deleteMultipleEmployees = createAsyncThunk(
   async (employeeIds, { dispatch, rejectWithValue }) => {
     try {
       const response = await axios.post(
-        'http://localhost:3000/api/v1/employee/deleteMultipleEmployees',
+        `${BASE_URL}/deleteMultipleEmployees`,
         employeeIds
       )
 

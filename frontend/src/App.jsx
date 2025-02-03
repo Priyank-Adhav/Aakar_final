@@ -60,8 +60,9 @@ import AddDesignation from "./pages/designation/AddDesignation.jsx";
 import DesignationProfile from "./pages/designation/DesignationProfile.jsx";
 import EditDesignation from "./pages/designation/EditDesignation.jsx";
 import EditDepartment from "./pages/department/EditDepartment.jsx";
+import { IP } from './constants.js'
 
-export const API_BASE_URL = `http://localhost:3000`
+export const API_BASE_URL = `http://${IP}:3000`
 const App = () => {
     const {isAuthenticated} = useSelector((state) => state.auth)
 

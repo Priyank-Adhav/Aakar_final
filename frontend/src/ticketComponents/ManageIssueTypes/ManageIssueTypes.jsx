@@ -24,6 +24,7 @@ import { IoIosAddCircleOutline } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import IssueTypeForm from '../IssueTypeForm/IssueTypeForm';
+import {IP} from '../../constants'
 
 const ManageIssueTypes = () => {
   const [issueTypes, setIssueTypes] = useState([]);
@@ -38,7 +39,7 @@ const ManageIssueTypes = () => {
 
   const fetchIssueTypes = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/issue_type/issue_types');
+      const response = await axios.get(`http://${IP}:3000/issue_type/issue_types`);
       setIssueTypes(response.data);
     } catch (error) {
       console.error('Error fetching issue types:', error);
@@ -48,7 +49,7 @@ const ManageIssueTypes = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/issue_type/issue_types/${id}`);
+      await axios.delete(`http://${IP}:3000/issue_type/issue_types/${id}`);
       setSnackbar({ open: true, message: 'Issue type deleted successfully!', severity: 'success' });
       fetchIssueTypes();
     } catch (error) {

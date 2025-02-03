@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import { IP } from "../../constants";
 
 
 const SendConformEmpToTraining = () => {
@@ -90,7 +91,7 @@ const SendConformEmpToTraining = () => {
         if (selectToSend.length > 0 || removeEmpIds.length > 0) {
           console.log("Employees to send:", selectToSend); 
           
-          axios.post('http://localhost:3000/send-multiple-emps-to-trainings', {
+          axios.post(`http://${IP}:3000/send-multiple-emps-to-trainings`, {
             trainingId: trainingId,
             selectedEmployees: selectToSend,
             selectedEmpToRemove : removeEmpIds 
@@ -109,7 +110,7 @@ const SendConformEmpToTraining = () => {
       
     
     useEffect(() => {
-        axios.get('http://localhost:3000/GetEmpFormRegister')
+        axios.get(`http://${IP}:3000/GetEmpFormRegister`)
             .then((response) => {
                 const preSelectedEmpIds = response.data.map(emp => emp.employeeId);  
                 setPreSelectedEmp(preSelectedEmpIds); 
@@ -129,7 +130,7 @@ const SendConformEmpToTraining = () => {
     
     useEffect(() => {
         axios
-            .get("http://localhost:3000/departments")
+            .get(`http://${IP}:3000/departments`)
             .then((response) => {
                 const array = response.data.map((arr) => ({
                     id: arr.departmentId,
@@ -146,7 +147,7 @@ const SendConformEmpToTraining = () => {
     useEffect(() => {
         if(skill == undefined){
             axios
-            .get(`http://localhost:3000/get-department-needed-trainings/${departmentId}`)
+            .get(`http://${IP}:3000/get-department-needed-trainings/${departmentId}`)
             .then((response) => {
                 const today = formatDateToYYYYMMDD(new Date());
                 //console.log("Start Date : " , startDate);
@@ -173,7 +174,7 @@ const SendConformEmpToTraining = () => {
             });
         }else{
             axios
-            .get(`http://localhost:3000/department-eligible-for-training/${departmentId}/${skill[0].id}`)
+            .get(`http://${IP}:3000/department-eligible-for-training/${departmentId}/${skill[0].id}`)
             .then((response) => {
                 const today = formatDateToYYYYMMDD(new Date());
                 const filteredData = response.data
@@ -200,7 +201,7 @@ const SendConformEmpToTraining = () => {
         if (!selectedTrainingId) return;
         const train_dept_data = {trainingId:selectedTrainingId,departmentId:departmentId}
         axios
-            .get(`http://localhost:3000/eligible-employee-to-send-to-training`,{params : train_dept_data})
+            .get(`http://${IP}:3000/eligible-employee-to-send-to-training`,{params : train_dept_data})
             .then((response) => {
                 const empFromAssignedTrining = response.data
                 // setEligibleEmployees(response.data.filter(emp =>!PreSelectedEmp.includes(emp.employeeId)));

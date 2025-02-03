@@ -22,6 +22,7 @@ import { IoIosGrid } from 'react-icons/io'
 import { GiSkills } from 'react-icons/gi'
 import { TbSubtask } from 'react-icons/tb'
 import { BsListTask } from 'react-icons/bs'
+import { IP } from '../constants.js'
 
 // Utility to map icon strings to actual icon components
 const iconMap = {
@@ -55,7 +56,7 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchAccess = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/GetEmployeeAccess', {
+        const response = await axios.get(`http://${IP}:3000/GetEmployeeAccess`, {
           params: { employeeId }, // Send employeeId as a query parameter
         })
         const { isRegistered, isTrainer } = response.data;
@@ -181,7 +182,7 @@ const Sidebar = () => {
     {
       name: 'Training',
       icon: 'MdOutlineModelTraining',
-      access: employeeAccess1 || trainerAccess || TrainingManagementAccess[0],
+      access: '1',
       children: [
         {
           name: 'My Status',

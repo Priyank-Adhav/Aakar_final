@@ -2,10 +2,10 @@ import mysql from 'mysql2'
 import ApiError from '../utils/ApiError.js'
 
 const connection = mysql.createConnection({
-  host: '127.0.0.1',
+  host: 'localhost',
   user: 'root',
-  password: 'Ashutosh@2003',
-  database: 'commondb1',
+  password: '',
+  database: 'aakarerp',
 })
 
 connection.connect((err) => {

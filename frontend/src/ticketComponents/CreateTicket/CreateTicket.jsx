@@ -11,6 +11,7 @@ import UserContext from '../context/UserContext.jsx';
 import Autocomplete from '@mui/material/Autocomplete';
 import './CreateTicket.css';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {IP} from '../../constants'
 
 
 function TicketForm() {
@@ -38,7 +39,7 @@ function TicketForm() {
     useEffect(() => {
         const fetchDepartments = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/department/departments');
+                const response = await axios.get(`http://${IP}:3000/department/departments`);
                 setDepartments(response.data);
             } catch (error) {
                 console.error('Error fetching departments:', error);
@@ -48,7 +49,7 @@ function TicketForm() {
 
         const fetchTicketTitles = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/ticketTitles/ticket_titles');
+                const response = await axios.get(`http://${IP}:3000/ticketTitles/ticket_titles`);
                 setTicketTitles(response.data);
             } catch (error) {
                 console.error('Error fetching ticket titles:', error);
@@ -58,7 +59,7 @@ function TicketForm() {
 
         const fetchIssueTypes = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/issue_type/issue_types');
+                const response = await axios.get(`http://${IP}:3000/issue_type/issue_types`);
                 setIssueTypes(response.data);
             } catch (error) {
                 console.error('Error fetching issue types:', error);
@@ -91,12 +92,12 @@ function TicketForm() {
         const updateIssueTypeAndDepartment = async () => {
             if (title && ticketTitles.map(ticket => ticket.title).includes(title)) {
                 try {
-                    const response = await axios.get(`http://localhost:3000/ticketTitles/ticket_titles/details_by_title/${title}`);
+                    const response = await axios.get(`http://${IP}:3000/ticketTitles/ticket_titles/details_by_title/${title}`);
                     const data = response.data;
                     setIssueType(data.issue_type);
                     setDepartment(data.department);
 
-                    const solutionsResponse = await axios.get(`http://localhost:3000/ticketTitles/ticket_titles/solutions_by_title/${title}`);
+                    const solutionsResponse = await axios.get(`http://${IP}:3000/ticketTitles/ticket_titles/solutions_by_title/${title}`);
                     const solutionsData = solutionsResponse.data;
 
                     setBasicSolutions(solutionsData.map(solution => solution.solution));
@@ -153,7 +154,7 @@ function TicketForm() {
                 formData.append('attachments', file); // Use 'attachments' consistently
             });
 
-            const response = await axios.post('http://localhost:3000/tickets', formData, {
+            const response = await axios.post(`http://${IP}:3000/tickets`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 

@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { AddCircleOutline, RemoveCircleOutline } from '@mui/icons-material';
 import axios from 'axios';
+import {IP} from '../../constants'
 
 const EmployeeForm = ({ employee, onSave, onClose, departments, designations }) => {
   const permissionsList = [
@@ -87,9 +88,9 @@ const EmployeeForm = ({ employee, onSave, onClose, departments, designations }) 
       const dataToSubmit = { ...formData, permissions: permissionsString };
 
       if (employee?.id) {
-        await axios.put(`http://localhost:3000/employee/updateEmployee/${employee.id}`, dataToSubmit);
+        await axios.put(`http://${IP}:3000/employee/updateEmployee/${employee.id}`, dataToSubmit);
       } else {
-        await axios.post('http://localhost:3000/employee/createEmployee', dataToSubmit);
+        await axios.post(`http://${IP}:3000/employee/createEmployee`, dataToSubmit);
       }
       onSave();
       onClose();

@@ -22,7 +22,7 @@ function AssigneeUpdate({ ticketId, currentAssignee, assigneeOptions, onUpdate }
     const newAssignee = event.target.value;
     try {
       // Make an API call to update the assignee
-      const response = await axios.put(`http://localhost:3000/tickets/tickets/${ticketId}/assignee`, { assignee: newAssignee });
+      const response = await axios.put(`http://${IP}:3000/tickets/tickets/${ticketId}/assignee`, { assignee: newAssignee });
 
       if (response.status === 200) {
         console.log('Assignee updated successfully to:', newAssignee);

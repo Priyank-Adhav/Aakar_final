@@ -22,6 +22,7 @@ import EmployeeForm from '../EmployeeForm/EmployeeForm';
 import { IoArrowBackCircleOutline } from 'react-icons/io5'; // Import back arrow icon
 import { IoIosAddCircleOutline } from 'react-icons/io'; // Import add icon
 import { useNavigate } from 'react-router-dom'; // Importing useNavigate for navigation
+import {IP} from '../../constants'
 
 const ManageEmployees = () => {
   const [employees, setEmployees] = useState([]);
@@ -39,7 +40,7 @@ const ManageEmployees = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/employee/detailedEmployees');
+      const response = await axios.get(`http://${IP}:3000/employee/detailedEmployees`);
       setEmployees(response.data);
     } catch (error) {
       console.error('Error fetching employees:', error);
@@ -48,7 +49,7 @@ const ManageEmployees = () => {
 
   const fetchDepartments = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/department/departments');
+      const response = await axios.get(`http://${IP}:3000/department/departments`);
       setDepartments(response.data);
     } catch (error) {
       console.error('Error fetching departments:', error);
@@ -57,7 +58,7 @@ const ManageEmployees = () => {
 
   const fetchDesignations = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/designation/designations');
+      const response = await axios.get(`http://${IP}:3000/designation/designations`);
       setDesignations(response.data);
     } catch (error) {
       console.error('Error fetching designations:', error);
@@ -66,7 +67,7 @@ const ManageEmployees = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/employee/employees/${id}`);
+      await axios.delete(`http://${IP}:3000/employee/employees/${id}`);
       fetchEmployees();
     } catch (error) {
       console.error('Error deleting employee:', error);

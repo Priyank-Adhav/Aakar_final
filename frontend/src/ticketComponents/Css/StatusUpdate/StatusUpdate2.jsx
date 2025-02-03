@@ -35,7 +35,7 @@ function StatusUpdate({ ticketId, currentStatus }) {
 
     try {
       // Make an API call to update the ticket status
-      await axios.put(`http://localhost:3000/tickets/tickets/${ticketId}/status`, { status: newStatus });
+      await axios.put(`http://${IP}:3000/tickets/tickets/${ticketId}/status`, { status: newStatus });
       console.log('Status updated successfully to:', newStatus);
     } catch (err) {
       console.error('Error updating status:', err);

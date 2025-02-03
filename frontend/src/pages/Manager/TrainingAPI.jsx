@@ -2,6 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import { API_BASE_URL } from '../../App';
+import { IP } from '../../constants';
 
 export const fetchSkillsByDepartment = async (departmentId) => {
   try {
@@ -111,7 +112,7 @@ export const fetchEmployeetwoDataAPI = async (departmentId) => {
 
 export const fetchTrainingSessions = async (trainingId) => {
     try {
-        const response = await axios.get(`http://localhost:3000/training/all_sessions/${trainingId}`);
+        const response = await axios.get(`http://${IP}:3000/training/all_sessions/${trainingId}`);
         if (Array.isArray(response.data)) {
             return response.data.map((session) => ({
                 ...session,
@@ -134,7 +135,7 @@ const formatDate = (dateString) => {
 
 export const fetchSessionAttendance = async (sessionId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/sessions/attendance/${sessionId}`);
+      const response = await fetch(`http://${IP}:3000/api/sessions/attendance/${sessionId}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

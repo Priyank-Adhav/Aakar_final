@@ -21,6 +21,7 @@ import * as XLSX from 'xlsx' // Import the xlsx library
 import jsPDF from 'jspdf'
 import 'jspdf-autotable' // Import for table formatting in PDF
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import {IP} from '../../constants'
 
 function FilteredTicketPage() {
   const location = useLocation()
@@ -66,7 +67,7 @@ function FilteredTicketPage() {
       params.accessLevel = AccessLevelValue;
       params.ticketsType = ticketsType;
 
-      let endpoint = 'http://localhost:3000/tickets/filteredTickets2'
+      let endpoint = `http://${IP}:3000/tickets/filteredTickets2`
 
       // Debugging
       console.log('Sending request to:', endpoint)

@@ -22,6 +22,7 @@ import TicketTitleForm from '../TicketTitleForm/TicketTitleForm';
 import { IoArrowBackCircleOutline } from 'react-icons/io5'; // Import back arrow icon
 import { IoIosAddCircleOutline } from 'react-icons/io'; // Import add icon
 import { useNavigate } from 'react-router-dom'; // Importing useNavigate for navigation
+import {IP} from '../../constants'
 
 const ManageTicketTitles = () => {
   const [ticketTitles, setTicketTitles] = useState([]);
@@ -35,7 +36,7 @@ const ManageTicketTitles = () => {
 
   const fetchTicketTitles = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/ticketTitles/ticket_titles');
+      const response = await axios.get(`http://${IP}:3000/ticketTitles/ticket_titles`);
       setTicketTitles(response.data);
     } catch (error) {
       console.error('Error fetching ticket titles:', error);
@@ -44,7 +45,7 @@ const ManageTicketTitles = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/ticketTitles/ticket_titles/${id}`);
+      await axios.delete(`http://${IP}:3000/ticketTitles/ticket_titles/${id}`);
       fetchTicketTitles();
     } catch (error) {
       console.error('Error deleting ticket title:', error);

@@ -6,17 +6,25 @@ import ApiResponse from "../utils/ApiResponse.js";
 export const addDesignation = asyncHandler(async (req, res) => {
     const {designationName} = req.body;
 
-    console.log(designationName);
+    const designationSlug = designationName.toLowerCase().replace('/S', '');
 
-    const insertQuery = "INSERT INTO designation (designationName) VALUES (?);";
+    const checkForExistenceQuery = `SELECT * FROM designation WHERE designationSlug = ?`;
 
-    connection.query(insertQuery, [designationName], (err, result, fields) => {
+    const [checkForExistenceQueryResult] = await connection.promise().query(checkForExistenceQuery, designationSlug);
+
+    if(checkForExistenceQueryResult.length > 0) {
+        return res.status(500).json(new ApiError(500, 'Designation Already Existed.', ['Designation Already Existed.']));
+    }
+
+    const insertQuery = "INSERT INTO designation (designationName, designationSlug) VALUES (?, ?);";
+
+    connection.query(insertQuery, [designationName, designationSlug], (err, result, fields) => {
         if (err) {
             res.status(400).json(new ApiError(400, "Error while adding designation", ['Error while adding designation']));
             return;
         }
 
-        res.status(201).json(new ApiResponse(201, {designationId: result.insertId, ...req.body}, "Designation Added."));
+        res.status(201).json(new ApiResponse(201, {designationId: result.insertId, ...req.body, designationSlug}, "Designation Added."));
     });
 });
 

@@ -3,6 +3,7 @@ import { TextField, Button, Typography, Paper, Box, Alert, CircularProgress } fr
 import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {IP} from '../../constants'
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ const LoginForm = () => {
         setLoading(true);
 
         try {
-            const res = await axios.post('http://localhost:3000/auth/login', {
+            const res = await axios.post(`http://${IP}:3000/auth/login`, {
                 email,
                 password,
             });

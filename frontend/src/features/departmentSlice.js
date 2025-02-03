@@ -1,8 +1,9 @@
 // departmentSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import {IP} from '../constants'
 
-const BASE_URL = 'http://localhost:3000/api/v1/department';
+const BASE_URL = `http://${IP}:3000/api/v1/department`;
 
 // Thunks
 export const fetchAllDepartments = createAsyncThunk(

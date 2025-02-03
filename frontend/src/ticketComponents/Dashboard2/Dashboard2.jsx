@@ -94,7 +94,7 @@ const CategoryWiseTickets = ({ categories }) => (
 const fetchTickets = async (user, setTickets, setDepartmentTickets, setTicketSummary, department, AccessLevelValue) => {
   console.log(AccessLevelValue);
   try {
-    // let endpoint = "http://localhost:3000/tickets/tickets";
+    // let endpoint = "http://${IP}:3000/tickets/tickets";
 
     let params = {};
 
@@ -110,7 +110,7 @@ const fetchTickets = async (user, setTickets, setDepartmentTickets, setTicketSum
     params.accessLevel = AccessLevelValue;
 
 
-    let endpoint = `http://localhost:3000/tickets/tickets/summary2`;
+    let endpoint = `http://${IP}:3000/tickets/tickets/summary2`;
 
     const response = await axios.get(endpoint, { params });
     setTicketSummary(response.data);
