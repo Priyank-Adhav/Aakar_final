@@ -7,11 +7,11 @@ import './SearchBar.css';
 import { useSelector } from 'react-redux';
 import GeneralSearchBar from '../../components/GenralSearchBar';
 import { fetchDepartmentSkills, fetchAssignedEmployeeData, fetchSkillsForDepartment, fetchDataBySkillsAndDepartment, saveEmployeeData } from './SkillMatrixAPI';
-
+import {skillTrainingByDepartment} from './UpdateSkillAPI';
 const SearchBar = () => {
   const [skills, setSkills] = useState([]);
-  const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [selectedSkills, setSelectedSkills] = useState([]);
+   const [allDept,setAllDept] = useState([]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -21,10 +21,17 @@ const SearchBar = () => {
   const [gradeChanges, setGradeChanges] = useState({});
   const [departmentExpSkill,setDepartmentExpSkill] = useState([]);
   const [disableAssign, setDisableAssign] = useState(false);
-  const departmentId = useSelector((state) => state.auth.user?.departmentId); 
-  const departmentName = useSelector((state) => state.auth.user?.departmentName);
-  const access = useSelector((state) =>  state?.auth?.user?.employeeAccess).split(',')[2];
 
+  const predepartmentId = useSelector((state) => state.auth.user?.departmentId); 
+  const selectedDepartmentId = useSelector((state) => state.department.selectedDepartmentId);
+  const effectiveDepartmentId = predepartmentId || selectedDepartmentId;
+  const [departmentId , setDepartmentId] = useState(effectiveDepartmentId);
+  const departmentName = useSelector((state) => state.auth.user?.departmentName);
+  const selectedDepartmentName = useSelector((state) => state.department.selectedDepartmentName);
+
+  const access = useSelector((state) =>  state?.auth?.user?.employeeAccess).split(',')[2];
+  //const employeeMail = useSelector((state) => state.auth.user?.employeeEmail)
+  
   const gradeAdd = access[5] === "1";
   const gradeRead = access[6] === "1";
   const gradeUpdate = access[7] === "1";
@@ -58,7 +65,9 @@ const SearchBar = () => {
   }
 
   useEffect(()=>{
+    skillTrainingByDepartments();
     if(departmentId){
+      
       fetchDepartmentSkills(departmentId)
         .then(skills => {
           setDepartmentExpSkill(skills);
@@ -69,6 +78,13 @@ const SearchBar = () => {
         })
     }
   },[departmentId]);
+
+    // useEffect(()=>{
+    //   if (objectDepartmentId.departmentId) {
+    //     setDepartmentId(objectDepartmentId.departmentId);
+    //     console.log("Department Id :", objectDepartmentId.departmentId);
+    //   }
+    // },[objectDepartmentId])
 
   useEffect(() => {
     fetchAssignedEmployeeData()
@@ -138,7 +154,17 @@ const SearchBar = () => {
   //   setData([]);
   // };
 
-
+    const skillTrainingByDepartments = async () => {
+      try{
+        const response = await skillTrainingByDepartment();
+        const depts = response
+        console.log("Response Data : ",depts);
+        setAllDept(depts)
+        console.log("all depts", allDept);
+      } catch (error){
+        console.error("There Is Error In fetching departments in update skill",error);
+      } 
+    };
   const OnGradeChange = (employeeId, skillId, newGrade) => {
     const isCheckboxSelected = selectedEmp.some(
       (emp) => emp.employeeId === employeeId && emp.skillId === skillId
@@ -227,7 +253,10 @@ const SearchBar = () => {
     return null; 
   }
 
-
+  // const handleDeptSelect = (selectedDept)=>{
+  //   setObjectDepartmentID(selectedDept);
+  //   console.log('T_dept_id', selectedDept);
+  // }
   const onSelectionChange = (employeeId, skillId, isChecked) => {
     if (isChecked) {
       setNewSelectedEmp(prevEmp => {
@@ -330,7 +359,18 @@ const SearchBar = () => {
       </div>)}
 
       <div className='searchbar-button-bar'>
-        <h1 className='search-bar-dept-name'>Department name: {departmentName}</h1>
+        <h3 className='update-skill-dept-name'>Department name: {departmentName || selectedDepartmentName || 'Unknown'}</h3>
+        {/* {employeeMail === 'admin@gmail.com' && (
+                    <GeneralSearchBar
+                    label='Search Department'
+                    options = {allDept} 
+                    displayKey = "departmentName"
+                    selectedValues={objectDepartmentId}
+                    setSelectedValues={handleDeptSelect}
+                    placeholder = 'Department'
+                    />
+        
+                  ) } */}
         <GeneralSearchBar 
           options={departmentExpSkill}
           includeSelectAll = {true}

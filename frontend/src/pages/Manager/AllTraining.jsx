@@ -9,8 +9,11 @@ import TableComponent from '../../components/TableCo';
 import GeneralSearchBar from '../../components/GenralSearchBar';
 import TableCo from '../../components/TableCo';
 import {fetchAllTraining, deleteTraining, fetchEmployeeoneDataAPI, fetchEmployeetwoDataAPI} from './TrainingAPI';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import dayjs from 'dayjs';
+import {skillTrainingByDepartment} from  './UpdateSkillAPI';
+//import { setSelectedDepartmentId } from '../../features/departmentSlice.js';
+//import GeneralSearchBar from '../../components/GenralSearchBar';
 
 const Tickit = ({ text, icon, onClick, count }) => (
   <button className="custom-button-all-training-ticket" onClick={onClick}>
@@ -27,16 +30,24 @@ const AllTraining = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTrainingData, setEditTrainingData] = useState(null);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [employeeCountOne, setEmployeeCountOne] = useState(null);
-  const [employeeCountTwo, setEmployeeCountTwo] = useState(null);
+  const [employeeCountOne, setEmployeeCountOne] = useState(0);
+  const [employeeCountTwo, setEmployeeCountTwo] = useState(0);
   const [employeesoneData, setEmployeesoneData] = useState([]);
   const [employeestwoData, setEmployeestwoData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [trainingList, setTrainingList] = useState([]);
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
-  const departmentId = useSelector((state) => state.auth.user?.departmentId);
   const access = useSelector((state) =>  state?.auth?.user?.employeeAccess).split(',')[2];
+  //const employeeMail = useSelector((state) => state.auth.user?.employeeEmail)
+  const [allDept,setAllDept] = useState([]);
+
+  const predepartmentId = useSelector((state) => state.auth.user?.departmentId); 
+  const selectedDepartmentId = useSelector((state) => state.department.selectedDepartmentId);
+  const effectiveDepartmentId = predepartmentId || selectedDepartmentId;
+  const [departmentId , setDepartmentId] = useState(effectiveDepartmentId);
+  const departmentName = useSelector((state) => state.auth.user?.departmentName);
+  const selectedDepartmentName = useSelector((state) => state.department.selectedDepartmentName);
 
   const addAccess = access[17] === "1";
   const readAccess = access[18];
@@ -47,7 +58,20 @@ const AllTraining = () => {
     fetchTrainingData();
      fetchEmployeeList1(setEmployeeCountOne);
      fetchEmployeeList2( setEmployeeCountTwo);
-  }, []);
+     skillTrainingByDepartments();
+  }, [departmentId]);
+
+  const skillTrainingByDepartments = async () => {
+    try{
+      const response = await skillTrainingByDepartment();
+      const depts = response
+      console.log("Response Data : ",depts);
+      setAllDept(depts)
+      console.log("all depts", allDept);
+    } catch (error){
+      console.error("There Is Error In fetching departments in update skill",error);
+    } 
+  };
 
   const fetchTrainingData = async () => {
     console.log("Fetched access: ", access);
@@ -337,10 +361,17 @@ const AllTraining = () => {
     },
   ];
 
-  const modifyTable = (newData) =>{
+  const modifyTable = (newData) => {
     console.log("Modified with new data:", newData);
     setFilteredData((prevData) => [...prevData, ...newData]);
   }
+
+  // const handleDeptSelect = (selectedDept) => {
+  //   setObjectDepartmentID(selectedDept);
+  //   setDepartmentId(selectedDept.departmentId);
+  //   dispatch(setSelectedDepartmentId(selectedDept.departmentId));
+  //   console.log('T_dept_id', selectedDept);
+  // }     
 
   const fetchEmployeeList1 = async (setCount) => {
     try {
@@ -423,9 +454,13 @@ const AllTraining = () => {
         </div>
       </div>
       )}
-      
+
+      <h2 className='all-training-dept-name'>Department: {departmentName || selectedDepartmentName || 'Unknown'}</h2>
+
       <div className="add-training-container">
         <div className="all-training-search-bar-container">
+          
+
           <GeneralSearchBar
             options={trainingList}
             label='Search Training'
@@ -435,6 +470,18 @@ const AllTraining = () => {
             includeSelectAll={false}
           />
         </div>
+
+        {/* {employeeMail === 'admin@gmail.com' && (
+              <GeneralSearchBar
+              label='Search Department'
+              options = {allDept} 
+              displayKey = "departmentName"
+              selectedValues={objectDepartmentId}
+              setSelectedValues={handleDeptSelect}
+              placeholder = 'Department'
+              />
+
+          ) } */}
         
         {addAccess &&
           <button onClick={handleAddTrainingToggle} className="add-training-btn">
@@ -443,7 +490,7 @@ const AllTraining = () => {
         </button>}
       </div>
 
-      {isAdding && (
+      {isAdding && departmentId && (
         <AddTraining 
           onTrainingAdded={isEditing ? handleTrainingUpdated : handleTrainingAdded} 
           editTrainingData={isEditing ? editTrainingData : null} 

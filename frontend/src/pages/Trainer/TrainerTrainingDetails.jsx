@@ -37,7 +37,7 @@ const [editingSession, setEditingSession] = useState(null); // To track session 
 
   // Fetch session data on component mount or refresh
   useEffect(() => {
-    console.log("hgjh",active)
+    console.log("Training id:",trainingId)
     if (!trainingId) {
       console.error('No trainingId found in location.state.');
       navigate(-1); // Navigate back if trainingId is missing

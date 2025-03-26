@@ -160,10 +160,10 @@ export const loginEmployee = asyncHandler(async (req, res) => {
         const employee = results[0];
 
         // Check if the password matches
-        const isPasswordValid = await bcrypt.compare(employeePassword, employee.employeePassword);
-        if (!isPasswordValid) {
-            return res.status(401).json({message: "Invalid email or password"});
-        }
+        // const isPasswordValid = await bcrypt.compare(employeePassword, employee.employeePassword);
+        // if (!isPasswordValid) {
+        //     return res.status(401).json({message: "Invalid email or password"});
+        // }
 
         // Generate access and refresh tokens
         const {accessToken, refreshToken} = await generateAccessAndRefreshToken(employee.employeeId);

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
-import { FiArrowLeftCircle } from 'react-icons/fi';
-import { FaPencilAlt } from 'react-icons/fa'; 
+import { FiArrowLeftCircle, FiFileText } from 'react-icons/fi';
 import { Modal, Box, Typography } from "@mui/material";
 import TableCo from '../../components/TableCo';
 import Grade from './Grade';
 import './ManagerEmployeeTrainingEnrolled.css';
 import { saveEmployeeData } from './SkillMatrixAPI';
 import { fetchEmployeesEnrolled } from './TrainingAPI';
+import reportMetadata from "./reportMetadata.json"; // Import metadata JSON
 import ReportGenerator from "./ReportGenerator"; // PDF generation component
 import dayjs from "dayjs";  // Import day.js
 
@@ -26,7 +26,9 @@ const ManagerEmployeeTrainingEnrolled = () => {
   const [loading, setLoading] = useState(false);
   const [attendanceModalOpen, setAttendanceModalOpen] = useState(false);
   const [attendanceData, setAttendanceData] = useState(null);
+  const [metadata, setMetadata] = useState({});
   const today = dayjs(new Date()).format("DD-MM-YYYY");
+  
 
   const fetchEmployeeData = () => {
     if (!trainingId) {
@@ -51,7 +53,7 @@ const ManagerEmployeeTrainingEnrolled = () => {
                 employeeId: curr.employeeId,
                 employeeName: curr.employeeName,
                 departmentName: curr.departmentName,
-                trainerFeedback: curr.trainerFeedback === 1 ? 'Pass' : curr.trainerFeedback === 0 ? 'Fail' : '',
+                trainerFeedback: curr.trainerFeedback,
                 skills: {},
               };
               acc.push(employee);
@@ -103,9 +105,14 @@ const ManagerEmployeeTrainingEnrolled = () => {
           { id: "attendanceStatus", label: "Attendance Status", align: "center" },
         ];
   
+        // Extract relevant metadata under "Report Title" header
+        const reportMetadataValues = reportMetadata["Training Attendance Report"] || {}; 
+  
+        setMetadata(reportMetadataValues); // Store metadata directly from JSON
         setAttendanceData({ headers, records });
-        setSessionDate(formattedDate);  // Store sessionDate separately
+        setSessionDate(formattedDate); // Store sessionDate separately
         setAttendanceModalOpen(true);
+        console.log("metadata:", metadata);
       } else {
         toast.info("No attendance records found.");
       }
@@ -192,7 +199,8 @@ const ManagerEmployeeTrainingEnrolled = () => {
         pskill_id={row.skills[skill]?.skillId}
         pgrade={row.skills[skill]?.grade}
         onGradeChange={handleGradeChange}
-        isChangable={row.trainerFeedback === 'Pass'}
+        isChangable={row}
+        // isChangable={row.trainerFeedback === 'Pass'}
       />
     ),
   }));
@@ -202,7 +210,7 @@ const ManagerEmployeeTrainingEnrolled = () => {
     label: 'Attendance Report',
     align: 'center',
     render: (row) => (
-      <FaPencilAlt
+      <FiFileText
         className="attendance-icon"
         onClick={() => handleAttendanceReport(row.employeeId, trainingId)}
         title="View Attendance Report"
@@ -213,9 +221,9 @@ const ManagerEmployeeTrainingEnrolled = () => {
 
   const columns = [...baseColumns, ...skillColumns, attendanceColumn];
 
-  const showUpdateButton = employeeData.some(
-    (employee) => employee.trainerFeedback === 'Pass'
-  );
+  // const showUpdateButton = employeeData.some(
+  //   (employee) => employee.trainerFeedback === 'Pass'
+  // );
 
   return (
     <div className="employee-training-enrolled-page">
@@ -228,7 +236,7 @@ const ManagerEmployeeTrainingEnrolled = () => {
         <h4 className="employeeSwitch-title">View Training Details</h4>
       </header>
 
-      {showUpdateButton && (
+      {
         <button
           className="employee-save-feedback-button"
           onClick={handleUpdateGrades}
@@ -236,26 +244,26 @@ const ManagerEmployeeTrainingEnrolled = () => {
         >
           {loading ? 'Updating...' : 'Update Grade'}
         </button>
-      )}
+      }
 
       <div className='manager-employee-training-container'>
         <TableCo rows={employeeData} columns={columns} />
       </div>
 
       {/* Attendance Report Modal */}
-      <Modal open={attendanceModalOpen} onClose={() => setAttendanceModalOpen(false)}>
+      {/* <Modal open={attendanceModalOpen} onClose={() => setAttendanceModalOpen(false)}>
         <Box sx={{ width: "80%", margin: "auto", mt: 5, backgroundColor: "white", padding: 3 }}>
           <Typography variant="h6" sx={{ mb: 2 }}>
             Attendance Report
-          </Typography>
+          </Typography> */}
           {attendanceData && (
             <ReportGenerator 
             reportTitle = "Training Attendance Sheet" 
-            docNo = "test doc 123"
-            OriginDate = {today}
-            revNo = "123"
-            revDate =  "12-11-2025"
-            trainerName = {trainerName}
+            docNo={metadata.docNo}
+            OriginDate={metadata.OriginDate}
+            revNo={metadata.revNo}
+            revDate={metadata.revDate}
+            trainerName = {trainerName} //pass "Trainer name: "
             location = "pune"
             trainingTitle = {trainingTitle}
             startTrainingDate = {startTrainingDate}
@@ -265,8 +273,8 @@ const ManagerEmployeeTrainingEnrolled = () => {
             tableData={attendanceData.records || []}
             />
           )}
-        </Box>
-      </Modal>
+        {/* </Box>
+      </Modal> */}
 
       <ToastContainer />
     </div>

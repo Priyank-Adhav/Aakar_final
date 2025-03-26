@@ -45,6 +45,8 @@ export const login = createAsyncThunk('auth/login', async ({ email, password }, 
 // Logout thunk (if backend logout logic is needed, otherwise this is local)
 export const logoutThunk = createAsyncThunk('auth/logout', async (_, { dispatch }) => {
     // Add API call for logout here if necessary
+    localStorage.removeItem('selectedDepartmentId');
+    localStorage.removeItem('selectedDepartmentName');
     dispatch(logout());
 });
 
@@ -64,6 +66,9 @@ const authSlice = createSlice({
 
             // Clear localStorage on logout
             localStorage.removeItem('authData');
+            localStorage.removeItem('selectedDepartmentId');
+            localStorage.removeItem('selectedDepartmentName');
+            localStorage.clear();
         },
     },
     extraReducers: (builder) => {
