@@ -28,7 +28,10 @@ const AddTraining = ({ onTrainingAdded, editTrainingData, isEditing, setIsEditin
   const [employeeOptions, setEmployeeOptions] = useState([]);
   const [searchedEmp, setSearchedEmp] = useState("");
   const [evaluationType, setEvaluationType] = useState(editTrainingData?.evaluationType || '');
+
   const departmentId = useSelector((state) => state.auth.user?.departmentId);
+  const selectedDepartmentId = useSelector((state) => state.department.selectedDepartmentId);
+  const effectiveDepartmentId = departmentId || selectedDepartmentId;
   
   useEffect(() => {
     if (selectedSkills.length > 0) {
@@ -45,14 +48,18 @@ const AddTraining = ({ onTrainingAdded, editTrainingData, isEditing, setIsEditin
     } else {
       setEmployeeOptions([]);
     }
+
+    console.log("Department Id : " ,departmentId);
+    console.log("Selected department id: ", selectedDepartmentId);
+    console.log("Effective department: ", effectiveDepartmentId);
   }, [selectedSkills]);
 
   
   // Fetch all skills
   useEffect(() => {
-    if (departmentId) {
+    if (effectiveDepartmentId) {
       (async () => {
-        const skills = await fetchSkillsByDepartment(departmentId);
+        const skills = await fetchSkillsByDepartment(effectiveDepartmentId);
         if (skills) {
           setSkillOptions(skills.map(skill => ({
             id: skill.skillId,

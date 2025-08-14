@@ -26,6 +26,13 @@
   justify-content: left;
 }
 
+.all-training-dept-name{
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-left: 40px;
+}
+
 .all-training-search-bar-container {
   margin-bottom: 20px;
   margin-top: 5px;

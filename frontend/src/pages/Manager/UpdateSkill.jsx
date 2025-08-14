@@ -6,15 +6,17 @@ import { toast } from 'react-toastify';
 import { FiPlusCircle, FiXCircle, FiEdit, FiTrash2, FiArrowLeftCircle } from 'react-icons/fi'; 
 import Textfield from '../../components/Textfield'; 
 import { Checkbox } from '@mui/material';
-import { departmentExpectedSkill, skillTrainingByDepartment, deactivateSkill, updateSkill, addSkill,  removeSkillFromDepartment, addSkillToDepartment  } from './UpdateSkillAPI'; // Import the API function
+import { departmentExpectedSkill, skillTrainingByDepartment, deactivateSkill, updateSkill, addSkill,  removeSkillFromDepartment, addSkillToDepartment } from './UpdateSkillAPI'; // Import the API function
+import {fetchDepartmentSkills} from './SkillMatrixAPI';
 import { useSelector } from 'react-redux';
 import { IP } from '../../constants';
+import GeneralSearchBar from '../../components/GenralSearchBar';
 
 const UpdateSkill = () => {
   const [allDept,setAllDept] = useState([]);
-  const departmentId = useSelector((state) => state.auth.user?.departmentId); 
-  const departmentName = useSelector((state) => state.auth.user?.departmentName);
   const employeeAccess = useSelector((state) => state.auth.user?.employeeAccess).split(",")[2];
+  const allInfo = useSelector((state) => state.auth.user);
+  //const employeeMail = useSelector((state) => state.auth.user?.employeeEmail)
   const [skills, setSkills] = useState([]);
   const [error, setError] = useState(null); 
   const [isBoxOpen, setIsBoxOpen] = useState(false);
@@ -24,6 +26,14 @@ const UpdateSkill = () => {
   const [selectedTrainingOption,setselectedTrainingOption] = useState([]);
   const [globalExpectedSkill,setGlobalExpectedSkill] = useState([]);
 
+  const predepartmentId = useSelector((state) => state.auth.user?.departmentId); 
+  const selectedDepartmentId = useSelector((state) => state.department.selectedDepartmentId);
+  const effectiveDepartmentId = predepartmentId || selectedDepartmentId;
+  const [departmentId , setDepartmentId] = useState(effectiveDepartmentId);
+  const departmentName = useSelector((state) => state.auth.user?.departmentName);
+  const selectedDepartmentName = useSelector((state) => state.department.selectedDepartmentName);
+  //const [objectDepartmentId , setObjectDepartmentID] = useState({});
+  
   // const [DepartmentIdGivTraining , setDepartmentIdGivTraining] = useState({});
   const navigate = useNavigate();
   const trainingOptions = [
@@ -33,8 +43,9 @@ const UpdateSkill = () => {
   const Add = employeeAccess[1] === "1" ;
   const Update = employeeAccess[2] === "1" ;
   const Delete = employeeAccess[3] === "1";
-
+  const state = useSelector((state) => state);
   useEffect(() => {
+    console.log('Redux State:', state);
     // if (departmentId) {
     //   setLoading(true);
     //   axios.get(`http://${IP}:8081/skills/${departmentId}`)
@@ -54,14 +65,26 @@ const UpdateSkill = () => {
     //   setError('No department selected. Please go back and select a department.');
     // }
     //// department skill fetching
+    skillTrainingByDepartments();
+    console.log("All info ",allInfo);
+    console.log("Pre dept id: ", predepartmentId);
+    console.log("selected dept id: ", selectedDepartmentId);
+    console.log("effective dept id: ", effectiveDepartmentId);
     if(departmentId){
+      console.log("Selected department id : ",departmentId);
+      fetchDepartmentSkill()
       departmentExpectedSkills();
-      skillTrainingByDepartments();
+      
     } else {
       console.error("Department ID is missing!");
       toast.error("Department ID is not available.");
     }
   }, [departmentId]);
+
+  // useEffect(()=>{
+  //   setDepartmentId(objectDepartmentId.departmentId);
+  //   console.log("Department Id :" , objectDepartmentId)
+  // },[objectDepartmentId])
 
   function convertIdtoLabel(id){
     const dataskillLable = trainingOptions.find(option => option.id === id)
@@ -73,6 +96,25 @@ const UpdateSkill = () => {
     return dataskillId ? dataskillId.id : null;
   }
   
+    const fetchDepartmentSkill = async () => {
+      try {
+        const response = await fetchDepartmentSkills(departmentId);
+        console.log("departmetn skills  : ", response.data);
+        // console.log(response .data.filter(dept => dept.departmentSkillType !== 2))
+        // const twothree = response.data.filter(dept => dept.departmentSkillType !== 2).map(dept =>{ return{ ...dept, departmentSkillType: departmentId === dept.departmentId ? convertIdtoLabel(dept.departmentSkillType) : convertIdtoLabel(1) }});        setSkills(twothree);
+        // const expectedSkill = response.data.filter((dept) => (dept.departmentSkillType === 2 || dept.departmentSkillType === 3) && dept.departmentId === departmentId && dept.departmentSkillStatus === 1).map((dept) => dept.skillId);
+        // setGlobalExpectedSkill(expectedSkill);
+        console.log("Expected Skill : ", departmentId);
+        console.log("Add employee Access : ",Add)
+        console.log("Update employee Access : ",Update)
+        console.log("Delete employee Access : ",Delete)
+
+
+      } catch (error){
+        console.error("Error in fetching department skills: ", error);
+      }
+    };
+
     const departmentExpectedSkills = async () => {
       try {
         const response = await departmentExpectedSkill();
@@ -289,6 +331,12 @@ const UpdateSkill = () => {
         });
     }
   };
+
+  // const handleDeptSelect = (selectedDept)=>{
+  //   setObjectDepartmentID(selectedDept);
+  //   setDepartmentId(selectedDept.departmentId);
+  //   console.log('T_dept_id', selectedDept);
+  // }
   
 
 
@@ -354,9 +402,20 @@ const UpdateSkill = () => {
         <FiArrowLeftCircle className="employeeSwitch-back-button" onClick={() => navigate(-1)} title="Go back"/>
         <h4 className='employeeSwitch-title'>Employee Details</h4>
       </header> */}
-  
       <div className='add-skill-container'>
-        <h2 className='update-skill-dept-name'>Update Skills for Department: {departmentName || 'Unknown'}</h2>
+        <h2 className='update-skill-dept-name'>Update Skills for Department: {departmentName || selectedDepartmentName || 'Unknown'}</h2>
+        {/* {employeeMail === 'admin@gmail.com' && (
+            <GeneralSearchBar
+            label='Search Department'
+            options = {allDept} 
+            displayKey = "departmentName"
+            selectedValues={objectDepartmentId}
+            setSelectedValues={handleDeptSelect}
+            placeholder = 'Department'
+            />
+
+          ) }
+        {console.log("deparef : " , departmentId)} */}
         
         {error && <p style={{ color: 'red' }}>{error}</p>}
     
@@ -376,7 +435,7 @@ const UpdateSkill = () => {
             onChange={(e) => setSkillName(e.target.value)}
             name='skillName'
           />
-
+          
           <Textfield
             label='Description'
             value={skillDescription}

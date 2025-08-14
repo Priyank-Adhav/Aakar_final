@@ -13,6 +13,7 @@ const TrainerViewAttendance = () => {
   const [attendanceData, setAttendanceData] = useState([]);
 
   useEffect(() => {
+    console.log("Training id in TrainerViewAttendance: ", trainingId);
     loadAttendanceData();
   }, [sessionId, navigate, trainingId]);
 

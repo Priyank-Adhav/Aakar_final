@@ -143,6 +143,7 @@ const TrainerSwitch = () => {
     const today = dayjs(new Date()).format("DD-MM-YYYY");
     const trainingEndDate = training.endTrainingDate;
     const isActive = today > trainingEndDate ? 1 : 0;
+    console.log("traininId", training.trainingId)
     navigate('/TrainerTrainingDetails', {
       state: {
         trainingId: training.trainingId,

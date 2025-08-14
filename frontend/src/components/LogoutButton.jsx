@@ -7,13 +7,22 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import axios from "axios";
 import {CiLogout} from "react-icons/ci";
+import {useSelector} from "react-redux";
+import {clearDepartment} from "../features/departmentSlice";    
 
 const LogoutButton = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
+    const state = useSelector((state) => state);
     const handleLogout = () => {
-        dispatch(logout());
+        
+        localStorage.clear();
+        sessionStorage.clear();
+        //  Cookies.remove("your_cookie_name");
+        dispatch(logout()); 
+        dispatch(clearDepartment());
+        state = useSelector((state) => state);  
+        console.log('Redux State: from logout : ', state);            
     };
 
 

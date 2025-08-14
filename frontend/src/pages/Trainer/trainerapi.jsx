@@ -109,7 +109,7 @@ export const viewAttendance = async (sessionId) => {
 // Save updated attendance
 export const saveAttendance = async (updatedAttendance) => {
   try {
-    const response = await axios.post(`http:/${IP}:3000/saveAttendance`, updatedAttendance);
+    const response = await axios.post(`http://${IP}:3000/saveAttendance`, updatedAttendance);
     console.log(response);
     return response.data;
     

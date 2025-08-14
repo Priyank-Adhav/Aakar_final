@@ -16,8 +16,9 @@ const AttendancePage = () => {
 
   // Fetch employee data for the training session
   useEffect(() => {
+    console.log("Training id in TrainerAttendance: ", trainingId);
     if (!trainingId) {
-      toast.error('Training ID is missing.');
+      console.log("trainerattendance");
       navigate(-1);
       return;
     }
@@ -58,10 +59,10 @@ const AttendancePage = () => {
     try {
       await saveAttendance(attendanceData);
       toast.success('Attendance saved successfully.');
-      navigate('/TrainerViewAttendance', { state: { sessionId } });
+      navigate('/TrainerViewAttendance', { state: { trainingId, sessionId } });
     } catch (error) {
-      //toast.error('Failed to save attendance. Please try again.');
-      navigate('/TrainerViewAttendance', { state: { sessionId } });
+      toast.error('Failed to save attendance. Please try again.');
+      //navigate('/TrainerViewAttendance', { state: { sessionId } });
     }
   };
 

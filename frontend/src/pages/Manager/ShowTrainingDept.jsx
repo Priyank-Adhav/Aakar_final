@@ -16,7 +16,13 @@ const ShowTrainingDept = () => {
   const [loading, setLoading] = useState(false);
   const [expandedRows, setExpandedRows] = useState({});
   const navigate = useNavigate();
-  const departmentId = useSelector((state) => state.auth.user?.departmentId); 
+
+  const predepartmentId = useSelector((state) => state.auth.user?.departmentId); 
+  const selectedDepartmentId = useSelector((state) => state.department.selectedDepartmentId);
+  const effectiveDepartmentId = predepartmentId || selectedDepartmentId;
+  const [departmentId , setDepartmentId] = useState(effectiveDepartmentId);
+  const departmentName = useSelector((state) => state.auth.user?.departmentName);
+  const selectedDepartmentName = useSelector((state) => state.department.selectedDepartmentName);
 
   useEffect(() => {
       const departments = departmentInfo;

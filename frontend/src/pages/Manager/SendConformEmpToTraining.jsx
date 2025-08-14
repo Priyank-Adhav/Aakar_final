@@ -33,8 +33,14 @@ const SendConformEmpToTraining = () => {
     const location = useLocation();
 
     const { skill } = location.state || {}; 
-    const departmentId = useSelector((state) => state.auth.user?.departmentId); 
     const employeeAccess = useSelector((state) => state.auth.user?.employeeAccess).split(",")[2];
+
+    const predepartmentId = useSelector((state) => state.auth.user?.departmentId); 
+    const selectedDepartmentId = useSelector((state) => state.department.selectedDepartmentId);
+    const effectiveDepartmentId = predepartmentId || selectedDepartmentId;
+    const [departmentId , setDepartmentId] = useState(effectiveDepartmentId);
+    const departmentName = useSelector((state) => state.auth.user?.departmentName);
+    const selectedDepartmentName = useSelector((state) => state.department.selectedDepartmentName);
 
     const Add = employeeAccess[13] === "1" ;
     const Read = employeeAccess[14] === "1" ;
