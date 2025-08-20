@@ -59,7 +59,7 @@ router.get('/employees/department/:departmentName', async (req, res) => {
     const [employeeRows] = await db.query(`
       SELECT e.employeeId, e.employeeName
       FROM employee e
-      INNER JOIN employeedesignation ed ON e.employeeId = ed.employeeId
+      INNER JOIN employeeDesignation ed ON e.employeeId = ed.employeeId
       INNER JOIN department d ON ed.departmentId = d.departmentId
       WHERE d.departmentName = ? AND ed.designationId = ?
     `, [departmentName, designationId]);
