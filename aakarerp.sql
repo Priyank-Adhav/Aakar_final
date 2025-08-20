@@ -204,11 +204,11 @@ INSERT INTO `employee` (`employeeId`, `customEmployeeId`, `employeeName`, `compa
 -- --------------------------------------------------------
 
 --
--- Table structure for table `employeedesignation`
+-- Table structure for table `employeeDesignation`
 --
 
-DROP TABLE IF EXISTS `employeedesignation`;
-CREATE TABLE IF NOT EXISTS `employeedesignation` (
+DROP TABLE IF EXISTS `employeeDesignation`;
+CREATE TABLE IF NOT EXISTS `employeeDesignation` (
   `employeeDesignationId` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `employeeId` int UNSIGNED DEFAULT NULL,
   `departmentId` tinyint UNSIGNED DEFAULT NULL,
@@ -221,10 +221,10 @@ CREATE TABLE IF NOT EXISTS `employeedesignation` (
 ) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `employeedesignation`
+-- Dumping data for table `employeeDesignation`
 --
 
-INSERT INTO `employeedesignation` (`employeeDesignationId`, `employeeId`, `departmentId`, `designationId`, `managerId`) VALUES
+INSERT INTO `employeeDesignation` (`employeeDesignationId`, `employeeId`, `departmentId`, `designationId`, `managerId`) VALUES
 (53, 112, 36, 35, 111),
 (54, 113, 37, 36, 111),
 (55, 114, 38, 36, 113),
