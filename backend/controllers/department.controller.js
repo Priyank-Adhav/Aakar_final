@@ -236,10 +236,10 @@ export const moveEmployee = asyncHandler(async (req, res) => {
                 .json(new ApiError(400, "Invalid employee IDs", [`Invalid IDs: ${invalidEmployeeIds.join(", ")}`]));
         }
 
-        // Step 3: Update the departmentId for the valid employees in employeedesignation
+        // Step 3: Update the departmentId for the valid employees in employeeDesignation
         const [updateResult] = await connection.promise().query(
             `
-            UPDATE employeedesignation
+            UPDATE employeeDesignation
             SET departmentId = ?
             WHERE employeeId IN (?)
             `,
