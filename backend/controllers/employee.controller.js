@@ -159,8 +159,18 @@ export const loginEmployee = asyncHandler(async (req, res) => {
 
         const employee = results[0];
 
-        // Check if the password matches
-        const isPasswordValid = await bcrypt.compare(employeePassword, employee.employeePassword);
+        let isPasswordValid = false;
+
+        // TEMPORARY: Allow plain 'admin' password for admin@gmail.com
+        if (
+            employee.employeeEmail === 'admin@gmail.com' &&
+            employeePassword === 'admin'
+        ) {
+            isPasswordValid = true;
+        } else {
+            isPasswordValid = await bcrypt.compare(employeePassword, employee.employeePassword);
+        }
+        
         if (!isPasswordValid) {
             return res.status(401).json({message: "Invalid email or password"});
         }
