@@ -19,7 +19,7 @@ router.post('/fetch-data', (req, res) => {
         es.grade, 
         s.skillName, e.employeeQualification, e.experienceInYears
       FROM 
-      employeedesignation ed
+      employeeDesignation ed
         
       LEFT JOIN 
         employeeSkill es ON ed.employeeId = es.employeeId
