@@ -184,13 +184,13 @@ INSERT INTO `employee` VALUES (38,'EMP011','Amit Yadav','AF','Diploma',2,'2002-0
 UNLOCK TABLES;
 
 --
--- Table structure for table `employeedesignation`
+-- Table structure for table `employeeDesignation`
 --
 
-DROP TABLE IF EXISTS `employeedesignation`;
+DROP TABLE IF EXISTS `employeeDesignation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `employeedesignation` (
+CREATE TABLE `employeeDesignation` (
   `employeeDesignationId` int unsigned NOT NULL AUTO_INCREMENT,
   `employeeId` int unsigned DEFAULT NULL,
   `departmentId` tinyint unsigned DEFAULT NULL,
@@ -204,13 +204,13 @@ CREATE TABLE `employeedesignation` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `employeedesignation`
+-- Dumping data for table `employeeDesignation`
 --
 
-LOCK TABLES `employeedesignation` WRITE;
-/*!40000 ALTER TABLE `employeedesignation` DISABLE KEYS */;
-INSERT INTO `employeedesignation` VALUES (66,56,8,33,6),(65,55,12,31,6),(64,54,8,30,53),(63,53,10,30,52),(62,53,12,29,51),(61,52,12,28,50),(60,51,12,32,46),(59,50,10,30,5),(58,50,12,31,46),(57,49,10,30,5),(56,48,8,29,6),(55,47,12,28,44),(54,46,8,27,6),(53,45,12,27,6),(52,44,8,27,6),(51,43,10,26,6),(50,42,12,27,6),(49,41,12,27,6),(48,40,13,26,6),(47,39,11,26,6),(46,38,12,28,6),(45,37,8,27,6),(44,36,9,26,6);
-/*!40000 ALTER TABLE `employeedesignation` ENABLE KEYS */;
+LOCK TABLES `employeeDesignation` WRITE;
+/*!40000 ALTER TABLE `employeeDesignation` DISABLE KEYS */;
+INSERT INTO `employeeDesignation` VALUES (66,56,8,33,6),(65,55,12,31,6),(64,54,8,30,53),(63,53,10,30,52),(62,53,12,29,51),(61,52,12,28,50),(60,51,12,32,46),(59,50,10,30,5),(58,50,12,31,46),(57,49,10,30,5),(56,48,8,29,6),(55,47,12,28,44),(54,46,8,27,6),(53,45,12,27,6),(52,44,8,27,6),(51,43,10,26,6),(50,42,12,27,6),(49,41,12,27,6),(48,40,13,26,6),(47,39,11,26,6),(46,38,12,28,6),(45,37,8,27,6),(44,36,9,26,6);
+/*!40000 ALTER TABLE `employeeDesignation` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
