@@ -4,7 +4,7 @@ const getEmailsForTicket = async (ticketId, db) => {
         const adminQuery = `
             SELECT e.employeeEmail 
             FROM employee e
-            INNER JOIN employeedesignation ed ON e.employeeId = ed.employeeId
+            INNER JOIN employeeDesignation ed ON e.employeeId = ed.employeeId
             INNER JOIN designation d ON ed.designationId = d.designationId
             WHERE d.designationName = 'Admin'
         `;
@@ -26,7 +26,7 @@ const getEmailsForTicket = async (ticketId, db) => {
         const hodQuery = `
             SELECT e.employeeEmail 
             FROM employee e
-            INNER JOIN employeedesignation ed ON e.employeeId = ed.employeeId
+            INNER JOIN employeeDesignation ed ON e.employeeId = ed.employeeId
             INNER JOIN designation d ON ed.designationId = d.designationId
             INNER JOIN department dep ON ed.departmentId = dep.departmentId
             INNER JOIN ticket t ON t.department = dep.departmentName
@@ -39,7 +39,7 @@ const getEmailsForTicket = async (ticketId, db) => {
         const assigneeQuery = `
             SELECT e.employeeEmail 
             FROM employee e
-            INNER JOIN employeedesignation ed ON e.employeeId = ed.employeeId
+            INNER JOIN employeeDesignation ed ON e.employeeId = ed.employeeId
             INNER JOIN designation d ON ed.designationId = d.designationId
             INNER JOIN department dep ON ed.departmentId = dep.departmentId
             INNER JOIN ticket t ON t.department = dep.departmentName
